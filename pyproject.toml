@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "subsets-integrations"
+version = "0.1.0"
+description = "Data integrations for the Subsets Data Warehouse"
+authors = ["Nathan <11278700+nathansnellaert@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11,<3.13"
+tenacity = "^8.2.3"
+pandas = "^2.1.1"
+numpy = "^1.26.1"
+dagster = "^1.5.3"
+dagster-gcp = "^0.21.3"
+dagster-gcp-pandas = "^0.21.3"
+dagster-cloud = "^1.5.3"
+limits = "^3.6.0"
+py7zr = "^0.20.6"
+ratelimit = "^2.2.1"
+ipykernel = "^6.25.2"
+lxml = "^4.9.3"
+requests = "2.31.0"
+urllib3 = "1.26.15"
+dagster-docker = "^0.21.8"
+dagster-postgres = "^0.21.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dev-dependencies]
+dagster-webserver = "*"
+pytest = "*"
+
+[tool.poetry.extras]
+dev = ["dagster-webserver", "pytest"]
+
+[tool.dagster]
+module_name = "integrations"
