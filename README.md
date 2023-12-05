@@ -1,6 +1,6 @@
 # Subsets Connectors
 
-This project contains the data connectors used to build the subset data warehouse. It currently 100+ datasets, such as:
+This project contains the data connectors used to build the subset data warehouse. It currently contains 100+ datasets, such as:
 
 - Commodity prices
 - Federal reserve economic data
