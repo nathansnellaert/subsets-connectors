@@ -32,17 +32,6 @@ This project relies on certain environment variables to function correctly:
 
 `dagster dev` is the easiest way to develop Dagster locally. It will run the Dagster daemon and Dagit UI in the background, and will automatically reload the pipeline when changes are made. See the [dagster docs](https://docs.dagster.io/deployment/open-source) for deploying in production.
 
-## To-do
-
-This project is in a very early stage. Here are some of the things that need to be done:
-
-- [ ] Implement freshness policies
-- [ ] Add more data connectors
-- [ ] Add dataset schemas to the asset metadata, and validate data against the schema
-- [ ] Better concurrency management
-- [ ] Switch from Parquet to BigQueryIOManager
-- [ ] Add CI/CD
-
 ## Contributing
 
 We welcome contributions to this project. 
