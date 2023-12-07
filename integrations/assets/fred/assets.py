@@ -17,9 +17,11 @@ def get_child_categories(category_id, api_key):
     url = f"https://api.stlouisfed.org/fred/category/children?category_id={category_id}&file_type=json&api_key={api_key}"
     return make_request(url)['categories']
 
-def get_series_info(api_key, category_id):
+def get_series_metadata_for_category(api_key, category_id):
     url = f"https://api.stlouisfed.org/fred/category/series?category_id={category_id}&api_key={api_key}&file_type=json"
-    return pd.DataFrame(make_request(url)['seriess'])
+    df = pd.DataFrame(make_request(url)['seriess'])
+    df['category_id'] = category_id
+    return df
 
 def get_series_observations(series_id, api_key):
     url = f"https://api.stlouisfed.org/fred/series/observations?series_id={series_id}&api_key={api_key}&file_type=json"
@@ -40,9 +42,13 @@ def fred_category_taxonomy() -> pd.DataFrame:
 
 @asset 
 def fred_series_metadata(fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
-    ids = fred_category_taxonomy['id'].unique()
-    metadata = [get_series_metadata_for_category(os.getenv("FRED_API_KEY"), category_id) for category_id in ids]
-    return pd.concat(metadata, ignore_index=True)
+    dfs = []
+    for id, name in fred_category_taxonomy[['id', 'name']].values:
+        df = get_series_metadata_for_category(os.getenv("FRED_API_KEY"), id)
+        df['category'] = name
+        df['category_id'] = id
+        dfs.append(df)
+    return pd.concat(dfs, ignore_index=True)
 
 @asset(metadata={
     "source": "fred",
