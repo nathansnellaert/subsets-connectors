@@ -189,4 +189,7 @@ def fred_releases() -> pd.DataFrame:
     api_key = os.getenv("FRED_API_KEY")
     url = f"https://api.stlouisfed.org/fred/releases?api_key={api_key}&file_type=json"
     releases_data = make_request(url)['releases']
-    return pd.DataFrame(releases_data, columns=["id", "realtime_start", "realtime_end", "name", "press_release", "link"])
+    df = pd.DataFrame(releases_data, columns=["id", "realtime_start", "realtime_end", "name", "press_release", "link"])
+    df['realtime_start'] = pd.to_datetime(df['realtime_start'])
+    df['realtime_end'] = pd.to_datetime(df['realtime_end'])
+    return df
