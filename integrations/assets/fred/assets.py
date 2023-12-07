@@ -1,6 +1,6 @@
 import requests
 import os
-from dagster import asset
+from dagster import asset, AssetKey
 import pandas as pd
 from ratelimit import limits, sleep_and_retry
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -12,6 +12,7 @@ def make_request(url):
     response = requests.get(url)
     response.raise_for_status() 
     return response.json()
+
 
 def get_child_categories(category_id, api_key):
     url = f"https://api.stlouisfed.org/fred/category/children?category_id={category_id}&file_type=json&api_key={api_key}"
@@ -28,6 +29,10 @@ def get_series_observations(series_id, api_key):
     df = pd.DataFrame(make_request(url)['observations'])[['date', 'value']]
     df['id'] = series_id
     return df
+
+def get_series_for_release(release_id, api_key):
+    url = f"https://api.stlouisfed.org/fred/release/series?release_id={release_id}&api_key={api_key}&file_type=json"
+    return make_request(url)['seriess']['id'].values().tolist()
 
 def get_category_tree(category_id, api_key):
     child_categories = get_child_categories(category_id, api_key)
@@ -123,6 +128,7 @@ def fred_series_metadata(fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
         dfs.append(df)
     return pd.concat(dfs, ignore_index=True)
 
+
 @asset(metadata={
     "source": "fred",
     "name": "Federal Reserve Economic Series Data",
@@ -138,8 +144,19 @@ def fred_series_metadata(fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
         "description": "Observed value for the given date."
     }]
 })
-def fred_series_data(fred_series_metadata: pd.DataFrame) -> pd.DataFrame:
-    ids = fred_series_metadata['id'].unique()
+def fred_series_data(context, fred_series_metadata: pd.DataFrame, fred_releases: pd.DataFrame) -> pd.DataFrame:
+    # It takes long to retrieve all observations, so for now only retrieve data for new series. There may be a better way to achieve this.
+    latest_materialization_event = context.instance.get_latest_materialization_event(AssetKey(["tsa_checkpoint_travel_numbers"]))
+
+    if latest_materialization_event:
+        last_materialization_date = pd.to_datetime(latest_materialization_event.timestamp, unit='s')
+        releases_since_last_materialization = fred_releases[fred_releases['realtime_start'] > last_materialization_date]
+        # Retrieve all series for releases that have been published since the last materialization
+        release_ids = fred_series_metadata[fred_series_metadata['realtime_start'].isin(releases_since_last_materialization['realtime_start'])]['id'].unique()
+        ids = [series_id for release_id in release_ids for series_id in get_series_for_release(release_id, os.getenv("FRED_API_KEY"))]
+    else:
+        # If there is no previous materialization, we want to retrieve all data
+        ids = fred_series_metadata['id'].unique()
     series = [get_series_observations(series_id, os.getenv("FRED_API_KEY")) for series_id in ids]
     return pd.concat(series, ignore_index=True)
 
