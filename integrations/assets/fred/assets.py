@@ -32,24 +32,24 @@ def get_category_tree(category_id, api_key):
     return child_categories + [item for child in child_categories for item in get_category_tree(child['id'], api_key)]
 
 @asset
-def fred_category_tree() -> pd.DataFrame:
+def fred_category_taxonomy() -> pd.DataFrame:
     api_key = os.getenv("FRED_API_KEY")
     categories = get_category_tree('0', api_key)
     return pd.DataFrame(categories, columns=["id", "name", "parent_id"])
 
 
 @asset 
-def fred_categories(fred_category_tree: pd.DataFrame) -> pd.DataFrame:
-    ids = fred_category_tree['id'].unique()
-    categories = [get_series_info(os.getenv("FRED_API_KEY"), category_id) for category_id in ids]
-    return pd.concat(categories, ignore_index=True)
+def fred_series_metadata(fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
+    ids = fred_category_taxonomy['id'].unique()
+    metadata = [get_series_metadata_for_category(os.getenv("FRED_API_KEY"), category_id) for category_id in ids]
+    return pd.concat(metadata, ignore_index=True)
 
 @asset(metadata={
     "source": "fred",
     "name": "Federal Reserve Economic Data",
     "description": "Dataset with time series from the Federal Reserve Economic Data (FRED) API.",
 })
-def fred_series(fred_categories: pd.DataFrame) -> pd.DataFrame:
-    ids = fred_categories['id'].unique()
+def fred_series_data(fred_series_metadata: pd.DataFrame) -> pd.DataFrame:
+    ids = fred_series_metadata['id'].unique()
     series = [get_series_observations(series_id, os.getenv("FRED_API_KEY")) for series_id in ids]
     return pd.concat(series, ignore_index=True)
