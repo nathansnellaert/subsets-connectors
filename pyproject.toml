@@ -23,6 +23,8 @@ requests = "2.31.0"
 urllib3 = "1.26.15"
 dagster-docker = "^0.21.8"
 dagster-postgres = "^0.21.8"
+html5lib = "^1.1"
+beautifulsoup4 = "^4.12.2"
 
 [build-system]
 requires = ["poetry-core"]
