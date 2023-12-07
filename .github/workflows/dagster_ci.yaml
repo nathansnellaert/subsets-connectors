@@ -1,0 +1,17 @@
+name: Dagster Code Load Test
+
+on: [push, pull_request]
+
+jobs:
+  valid-pipeline-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11' 
+    - name: Install Dagster
+      run: pip install dagster
+    - name: Load Dagster Code Location
+      run: dagster dev
