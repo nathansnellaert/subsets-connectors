@@ -142,3 +142,34 @@ def fred_series_data(fred_series_metadata: pd.DataFrame) -> pd.DataFrame:
     ids = fred_series_metadata['id'].unique()
     series = [get_series_observations(series_id, os.getenv("FRED_API_KEY")) for series_id in ids]
     return pd.concat(series, ignore_index=True)
+
+
+@asset(metadata={
+    "source": "fred",
+    "name": "Federal Reserve Economic Data Releases",
+    "description": "A collection of recent economic data releases from the FRED API, including release id, real-time availability dates, name of the release, press release status, and related links.",
+    "columns": [{
+        "name": "id",
+        "description": "Unique identifier for the data release."
+    }, {
+        "name": "realtime_start",
+        "description": "The start date of the real-time period when the data was available."
+    }, {
+        "name": "realtime_end",
+        "description": "The end date of the real-time period when the data was available."
+    }, {
+        "name": "name",
+        "description": "Name of the data release."
+    }, {
+        "name": "press_release",
+        "description": "Boolean indicating if the release is a press release."
+    }, {
+        "name": "link",
+        "description": "Link to more information about the data release, if available."
+    }]
+})
+def fred_releases() -> pd.DataFrame:
+    api_key = os.getenv("FRED_API_KEY")
+    url = f"https://api.stlouisfed.org/fred/releases?api_key={api_key}&file_type=json"
+    releases_data = make_request(url)['releases']
+    return pd.DataFrame(releases_data, columns=["id", "realtime_start", "realtime_end", "name", "press_release", "link"])
