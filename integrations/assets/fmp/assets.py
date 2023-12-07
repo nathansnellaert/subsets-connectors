@@ -119,34 +119,29 @@ def fmp_eod_prices(context) -> pd.DataFrame:
     path = f'batch-request-end-of-day-prices?date={context.partition_key}&apikey=' + os.environ['FMP_API_KEY']
     return make_request(path)
 
-@asset(partitions_def=DailyPartitionsDefinition(start_date="2022-12-03"))
-def turbotest(context) -> pd.DataFrame:
-    path = f'batch-request-end-of-day-prices?date={context.partition_key}&apikey=' + os.environ['FMP_API_KEY']
-    return make_request(path)
 
-
-@asset
-def cryptocurrency_prices(fmp_crypto_symbols: pd.DataFrame, turbotest: pd.DataFrame) -> pd.DataFrame:
+@asset(partitions_def=DailyPartitionsDefinition(start_date="2013-01-01"))
+def cryptocurrency_prices(fmp_crypto_symbols: pd.DataFrame, fmp_eod_prices: pd.DataFrame) -> pd.DataFrame:
     crypto_symbols = fmp_crypto_symbols['symbol'].unique()
-    crypto_prices = turbotest[turbotest['symbol'].isin(crypto_symbols)]
+    crypto_prices = fmp_eod_prices[fmp_eod_prices['symbol'].isin(crypto_symbols)]
     return crypto_prices
 
 
-@asset
+@asset(partitions_def=DailyPartitionsDefinition(start_date="2013-01-01"))
 def commodity_prices(fmp_commodity_symbols: pd.DataFrame, fmp_eod_prices: pd.DataFrame) -> pd.DataFrame:
     commodity_symbols = fmp_commodity_symbols['symbol'].unique()
     commodity_prices = fmp_eod_prices[fmp_eod_prices['symbol'].isin(commodity_symbols)]
     return commodity_prices
 
 
-@asset
+@asset(partitions_def=DailyPartitionsDefinition(start_date="2013-01-01"))
 def forex_prices(fmp_forex_symbols: pd.DataFrame, fmp_eod_prices: pd.DataFrame) -> pd.DataFrame:
     forex_symbols = fmp_forex_symbols['symbol'].unique()
     forex_prices = fmp_eod_prices[fmp_eod_prices['symbol'].isin(forex_symbols)]
     return forex_prices
 
 
-@asset
+@asset(partitions_def=DailyPartitionsDefinition(start_date="2013-01-01"))
 def indices_prices(fmp_indices_symbols: list, fmp_eod_prices: pd.DataFrame) -> pd.DataFrame:
     indices_symbols = [symbol for symbol, name in fmp_indices_symbols]
     indices_prices = fmp_eod_prices[fmp_eod_prices['symbol'].isin(indices_symbols)]
