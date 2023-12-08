@@ -15,8 +15,12 @@ jobs:
       run: |
         curl -sSL https://install.python-poetry.org | python3 -
         echo "$HOME/.local/bin" >> $GITHUB_PATH
+    - name: Set PYTHONPATH
+      run: echo "PYTHONPATH=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
     - name: Install dependencies
       run: |
         poetry install
     - name: Run tests
+      env:
+        PYTHONPATH: ${{ github.workspace }}
       run: poetry run pytest
