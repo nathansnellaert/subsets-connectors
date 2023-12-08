@@ -1,9 +1,9 @@
-name: Dagster Code Load Test
+name: CI Pipeline
 
 on: [push, pull_request]
 
 jobs:
-  valid-pipeline-test:
+  test:
     runs-on: ubuntu-latest
     env:
       PYTHONPATH: ${{ github.workspace }}
