@@ -5,6 +5,10 @@ on: [push, pull_request]
 jobs:
   valid-pipeline-test:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+      DAGSTER_HOME: '/path/to/dagster/home' 
+      DAGSTER_DATA_DIR: '/path/to/dagster/data' 
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
@@ -15,12 +19,7 @@ jobs:
       run: |
         curl -sSL https://install.python-poetry.org | python3 -
         echo "$HOME/.local/bin" >> $GITHUB_PATH
-    - name: Set PYTHONPATH
-      run: echo "PYTHONPATH=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
     - name: Install dependencies
-      run: |
-        poetry install
+      run: poetry install
     - name: Run tests
-      env:
-        PYTHONPATH: ${{ github.workspace }}
       run: poetry run pytest
