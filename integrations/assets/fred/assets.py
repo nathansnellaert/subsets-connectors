@@ -1,6 +1,6 @@
 import requests
 import os
-from dagster import asset, AssetKey
+from dagster import DagsterEventType, EventRecordsFilter, asset, AssetKey
 import pandas as pd
 from ratelimit import limits, sleep_and_retry
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -145,11 +145,16 @@ def fred_series_metadata(fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
     }]
 })
 def fred_series_data(context, fred_series_metadata: pd.DataFrame, fred_releases: pd.DataFrame) -> pd.DataFrame:
-    # It takes long to retrieve all observations, so for now only retrieve data for new series. There may be a better way to achieve this.
-    latest_materialization_event = context.instance.get_latest_materialization_event(AssetKey(["tsa_checkpoint_travel_numbers"]))
-
-    if latest_materialization_event:
-        last_materialization_date = pd.to_datetime(latest_materialization_event.timestamp, unit='s')
+    event_records_filter = EventRecordsFilter(
+        asset_key=AssetKey('fred_series_data'), 
+        event_type=DagsterEventType.ASSET_MATERIALIZATION
+    ) 
+    # Only contains successful materializations
+    materializations = context.instance.event_log_storage.get_event_records(event_records_filter)
+    latest_successful_materialization = materializations[-1] if len(materializations) > 0 else None
+    if latest_successful_materialization:
+        last_materialization_date = pd.to_datetime(latest_successful_materialization.timestamp, unit='s')
+        print(f"Last successful materialization date: {last_materialization_date}")
         releases_since_last_materialization = fred_releases[fred_releases['realtime_start'] > last_materialization_date]
         # Retrieve all series for releases that have been published since the last materialization
         release_ids = fred_series_metadata[fred_series_metadata['realtime_start'].isin(releases_since_last_materialization['realtime_start'])]['id'].unique()
@@ -189,4 +194,7 @@ def fred_releases() -> pd.DataFrame:
     api_key = os.getenv("FRED_API_KEY")
     url = f"https://api.stlouisfed.org/fred/releases?api_key={api_key}&file_type=json"
     releases_data = make_request(url)['releases']
-    return pd.DataFrame(releases_data, columns=["id", "realtime_start", "realtime_end", "name", "press_release", "link"])
+    df = pd.DataFrame(releases_data, columns=["id", "realtime_start", "realtime_end", "name", "press_release", "link"])
+    df['realtime_start'] = pd.to_datetime(df['realtime_start'])
+    df['realtime_end'] = pd.to_datetime(df['realtime_end'])
+    return df
