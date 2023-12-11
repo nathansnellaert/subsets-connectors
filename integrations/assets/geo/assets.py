@@ -1,4 +1,4 @@
-from dagster import asset
+from dagster import asset, FreshnessPolicy
 import pandas as pd
 
 @asset(metadata={
@@ -51,7 +51,7 @@ import pandas as pd
         "name": "is_independent",
         "description": "Indicates if the country is independent"
     }]
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 1 * *", maximum_lag_minutes=60 * 24))
 def countries(context):
     df = pd.read_csv('https://raw.githubusercontent.com/datasets/country-codes/master/data/country-codes.csv', keep_default_na=False)
     keep_cols = {
@@ -90,7 +90,7 @@ def countries(context):
         "name": "intermediate_region_name",
         "description": "Name of the intermediate geographic region"
     }]
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 1 * *", maximum_lag_minutes=60 * 24))
 def regions(countries):
     return countries[['region_name', 'subregion_name', 'intermediate_region_name']].drop_duplicates()
 
@@ -123,7 +123,7 @@ def regions(countries):
         "name": "longitude",
         "description": "Longitude coordinate of the city"
     }]
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 1 * *", maximum_lag_minutes=60 * 24))
 def cities():
     url = "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000/exports/csv"
     cities = pd.read_csv(url, sep=";")
@@ -144,7 +144,7 @@ def cities():
         "name": "border_country",
         "description": "Bordering country code"
     }]
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 1 * *", maximum_lag_minutes=60 * 24))
 def country_border_mapping():
     url = "https://raw.githubusercontent.com/geodatasource/country-borders/master/GEODATASOURCE-COUNTRY-BORDERS.CSV"
     df = pd.read_csv(url, keep_default_na=False)
@@ -166,7 +166,7 @@ def country_border_mapping():
         "name": "org_name",
         "description": "Name of the organization"
     }]
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 1 * *", maximum_lag_minutes=60 * 24))
 def organisation():
     orgs_url = "https://raw.githubusercontent.com/dieghernan/Country-Codes-and-International-Organizations/master/outputs/CountrycodesOrgs.csv"
     orgs = pd.read_csv(orgs_url)

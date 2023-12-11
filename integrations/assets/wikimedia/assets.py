@@ -1,12 +1,12 @@
-from dagster import asset, DailyPartitionsDefinition
+from dagster import asset, DailyPartitionsDefinition, FreshnessPolicy
 import requests
 import bz2
 from collections import defaultdict
 import pyarrow as pa
-import pyarrow.parquet as pq
 from datetime import datetime
 
-@asset(partitions_def=DailyPartitionsDefinition(start_date="2016-01-01"), io_manager_key="vanilla_parquet_io_manager")
+@asset(partitions_def=DailyPartitionsDefinition(start_date="2016-01-01"), io_manager_key="vanilla_parquet_io_manager",
+freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * *", maximum_lag_minutes=60 * 24))
 def wikipedia_daily_pageviews(context):
     date_str = context.partition_key
     year, month, day = date_str.split('-')

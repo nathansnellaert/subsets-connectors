@@ -5,7 +5,7 @@ from dagster import asset, FreshnessPolicy
     "source": "our_world_in_data",
     "name": "COVID-19 Statistics",
     "description": "Daily COVID-19 cases and deaths data by country."
-}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * *", maximum_lag_minutes=60*24))
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * *", maximum_lag_minutes=60 * 24))
 def covid_stats(countries):
     url = "https://covid.ourworldindata.org/data/owid-covid-data.csv"
     df = pd.read_csv(url)

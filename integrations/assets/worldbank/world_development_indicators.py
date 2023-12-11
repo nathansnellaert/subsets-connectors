@@ -1,5 +1,5 @@
 import pandas as pd
-from dagster import AssetOut, multi_asset
+from dagster import AssetOut, multi_asset, FreshnessPolicy
 import requests
 import zipfile
 import io
@@ -18,7 +18,7 @@ import io
                 {"name": "year", "description": "Year of the data"},
                 {"name": "value", "description": "Value of the indicator"}
             ]
-        }),
+        }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24 * 7)),
         "world_development_indicators_series_metadata": AssetOut(metadata={
             "source": "worldbank",
             "name": "WDI Series Metadata",
@@ -41,7 +41,7 @@ import io
                 {"name": "development_relevance", "description": "Relevance of the indicator to development"},
                 {"name": "license_type", "description": "Type of license for the data"}
             ]
-        }),
+        }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24 * 7)),
         "world_development_indicators_country_series_metadata": AssetOut(metadata={
             "source": "worldbank",
             "name": "WDI Country Series Metadata",
@@ -51,7 +51,7 @@ import io
                 {"name": "indicator_code", "description": "Unique code for the indicator"},
                 {"name": "description", "description": "Description of the country-indicator relationship"}
             ]
-        }),
+        }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24 * 7)),
         "world_development_indicators_observation_metadata": AssetOut(metadata={
             "source": "worldbank",
             "name": "WDI Footnote Metadata",
@@ -62,7 +62,7 @@ import io
                 {"name": "year", "description": "Year of the footnote"},
                 {"name": "description", "description": "Description of the footnote"}
             ]
-        }),
+        }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24 * 7)),
         "world_development_indicators_series_year_metadata": AssetOut(metadata={
             "source": "worldbank",
             "name": "WDI Series Time Metadata",
@@ -72,7 +72,7 @@ import io
                 {"name": "year", "description": "Year related to the series"},
                 {"name": "description", "description": "Description of the time series metadata"}
             ]
-        }),
+        }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24 * 7)),
     }
 )
 def process_world_development_indicators(countries: pd.DataFrame):

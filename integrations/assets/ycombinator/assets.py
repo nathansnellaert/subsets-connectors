@@ -1,12 +1,12 @@
 import pandas as pd
-from dagster import asset
+from dagster import asset, FreshnessPolicy
 from .download import download_ycombinator_companies
 
 @asset(metadata={
     "source": "ycombinator",
     "name": "YCombinator Companies",
     "description": "Detailed data of companies that have participated in Y Combinator's accelerator program.",
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * *", maximum_lag_minutes=60 * 24))
 def ycombinator_companies():
     start_year = 2005
     end_year = 2024

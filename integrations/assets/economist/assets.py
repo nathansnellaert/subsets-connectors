@@ -1,4 +1,4 @@
-from dagster import asset
+from dagster import asset, FreshnessPolicy
 import pandas as pd
 
 @asset(metadata={
@@ -21,7 +21,7 @@ import pandas as pd
         "name": "adjusted_dollar_price",
         "description": "Price of a Big Mac in USD adjusted for GDP"
     }]
-})
+}, freshness_policy=FreshnessPolicy(maximum_lag_minutes=60 * 24 * 7), cron_schedule="0 0 1 * *")
 def economist_big_mac_index(countries):
     url = "https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-full-index.csv"
     df = pd.read_csv(url)
@@ -31,3 +31,5 @@ def economist_big_mac_index(countries):
     # drop iso_a3 and 'name'
     df = df.drop(columns=['iso_a3', 'name'])
     df = df[['country_code2', 'country_name', 'date', 'dollar_price', 'adjusted_dollar_price']]
+
+    
