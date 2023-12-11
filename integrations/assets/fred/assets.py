@@ -131,43 +131,6 @@ def fred_series_metadata(fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
 
 @asset(metadata={
     "source": "fred",
-    "name": "Federal Reserve Economic Series Data",
-    "description": "Observations for all time series from the Federal Reserve Economic Data (FRED) API.",
-    "columns": [{
-        "name": "id",
-        "description": "Identifier of the data series to which the observation belongs."
-    }, {
-        "name": "date",
-        "description": "Date of the data observation."
-    }, {
-        "name": "value",
-        "description": "Observed value for the given date."
-    }]
-})
-def fred_series_data(context, fred_series_metadata: pd.DataFrame, fred_releases: pd.DataFrame) -> pd.DataFrame:
-    event_records_filter = EventRecordsFilter(
-        asset_key=AssetKey('fred_series_data'), 
-        event_type=DagsterEventType.ASSET_MATERIALIZATION
-    ) 
-    # Only contains successful materializations
-    materializations = context.instance.event_log_storage.get_event_records(event_records_filter)
-    latest_successful_materialization = materializations[-1] if len(materializations) > 0 else None
-    if latest_successful_materialization:
-        last_materialization_date = pd.to_datetime(latest_successful_materialization.timestamp, unit='s')
-        print(f"Last successful materialization date: {last_materialization_date}")
-        releases_since_last_materialization = fred_releases[fred_releases['realtime_start'] > last_materialization_date]
-        # Retrieve all series for releases that have been published since the last materialization
-        release_ids = fred_series_metadata[fred_series_metadata['realtime_start'].isin(releases_since_last_materialization['realtime_start'])]['id'].unique()
-        ids = [series_id for release_id in release_ids for series_id in get_series_for_release(release_id, os.getenv("FRED_API_KEY"))]
-    else:
-        # If there is no previous materialization, we want to retrieve all data
-        ids = fred_series_metadata['id'].unique()
-    series = [get_series_observations(series_id, os.getenv("FRED_API_KEY")) for series_id in ids]
-    return pd.concat(series, ignore_index=True)
-
-
-@asset(metadata={
-    "source": "fred",
     "name": "Federal Reserve Economic Data Releases",
     "description": "A collection of recent economic data releases from the FRED API, including release id, real-time availability dates, name of the release, press release status, and related links.",
     "columns": [{
@@ -198,3 +161,65 @@ def fred_releases() -> pd.DataFrame:
     df['realtime_start'] = pd.to_datetime(df['realtime_start'])
     df['realtime_end'] = pd.to_datetime(df['realtime_end'])
     return df
+
+def fred_series_data_for_category(category_id: int, fred_series_metadata: pd.DataFrame, category_taxonomy: pd.DataFrame) -> pd.DataFrame:
+    api_key = os.getenv("FRED_API_KEY")
+
+    def get_all_child_category_ids(parent_id, taxonomy):
+        """
+        Recursively fetches all child category IDs for a given parent category.
+        """
+        child_categories = taxonomy[taxonomy['parent_id'] == parent_id]
+        child_ids = child_categories['id'].tolist()
+        for child_id in child_ids:
+            child_ids.extend(get_all_child_category_ids(child_id, taxonomy))
+        return child_ids
+
+    print(category_taxonomy)
+    print(category_id)
+    # Include the category itself and all its subcategories
+    all_category_ids = [category_id] + get_all_child_category_ids(category_id, category_taxonomy)
+    
+    print(f"Fetching data for {len(all_category_ids)} categories")
+    # Filter metadata for the specific category and its subcategories
+    filtered_metadata = fred_series_metadata[fred_series_metadata['category_id'].isin(all_category_ids)]
+    
+    if filtered_metadata.empty:
+        return pd.DataFrame()
+
+    series_ids = filtered_metadata['id'].unique()
+    series_data = [get_series_observations(series_id, api_key) for series_id in series_ids]
+
+    return pd.concat(series_data, ignore_index=True)
+
+@asset
+def fred_series_money_banking_finance(fred_series_metadata: pd.DataFrame, fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
+    return fred_series_data_for_category(32991, fred_series_metadata, fred_category_taxonomy)
+
+@asset
+def fred_series_population_employment_labor_markets(fred_series_metadata: pd.DataFrame, fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
+    return fred_series_data_for_category(10, fred_series_metadata, fred_category_taxonomy)
+
+@asset
+def fred_series_national_accounts(fred_series_metadata: pd.DataFrame, fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
+    return fred_series_data_for_category(32992, fred_series_metadata, fred_category_taxonomy)
+
+@asset
+def fred_series_production_business_activity(fred_series_metadata: pd.DataFrame, fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
+    return fred_series_data_for_category(1, fred_series_metadata, fred_category_taxonomy)
+
+@asset
+def fred_series_prices(fred_series_metadata: pd.DataFrame, fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
+    return fred_series_data_for_category(32455, fred_series_metadata, fred_category_taxonomy)
+
+@asset
+def fred_series_international_data(fred_series_metadata: pd.DataFrame, fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
+    return fred_series_data_for_category(32263, fred_series_metadata, fred_category_taxonomy)
+
+@asset
+def fred_series_us_regional_data(fred_series_metadata: pd.DataFrame, fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
+    return fred_series_data_for_category(3008, fred_series_metadata, fred_category_taxonomy)
+
+@asset
+def fred_series_academic_data(fred_series_metadata: pd.DataFrame, fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
+    return fred_series_data_for_category(33060, fred_series_metadata, fred_category_taxonomy)
