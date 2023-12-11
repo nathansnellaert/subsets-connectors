@@ -1,44 +1,37 @@
-from dagster import asset
+from dagster import asset, FreshnessPolicy
 import pandas as pd
 import os
 import json
 import requests
 
-@asset(metadata={
-    "source": "Financial Modeling Prep",
-    "name": "Stock Dividend",
-    "description": "Historical dividend data for stocks including the dividend amount, record, payment, and declaration dates.",
-    "columns": [{
-        "name": "date",
-        "description": "The date of the dividend event"
-    }, {
-        "name": "label",
-        "description": "The label or description of the dividend event"
-    }, {
-        "name": "adj_dividend",
-        "description": "The adjusted dividend value"
-    }, {
-        "name": "dividend",
-        "description": "The actual dividend value"
-    }, {
-        "name": "record_date",
-        "description": "The record date for the dividend"
-    }, {
-        "name": "payment_date",
-        "description": "The payment date for the dividend"
-    }, {
-        "name": "declaration_date",
-        "description": "The declaration date for the dividend"
-    }, {
-        "name": "symbol",
-        "description": "The stock ticker symbol"
-    }]
-})
-def stock_dividend(ticker):
+@asset(
+    metadata={
+        "source": "Financial Modeling Prep",
+        "name": "Stock Dividends Data",
+        "description": "Retrieves historical dividend data for stocks, including adjusted dividends, record, payment, and declaration dates.",
+        "columns": [
+            {"name": "date", "type": "date", "description": "Date of the dividend."},
+            {"name": "label", "type": "string", "description": "Label of the dividend event."},
+            {"name": "adj_dividend", "type": "float", "description": "Adjusted dividend value."},
+            {"name": "dividend", "type": "float", "description": "Dividend value."},
+            {"name": "record_date", "type": "date", "description": "Record date of the dividend."},
+            {"name": "payment_date", "type": "date", "description": "Payment date of the dividend."},
+            {"name": "declaration_date", "type": "date", "description": "Declaration date of the dividend."},
+            {"name": "symbol", "type": "string", "description": "Stock ticker symbol."}
+        ]
+    },
+    freshness_policy=FreshnessPolicy(maximum_lag_minutes=60 * 24 * 30, cron_schedule="0 0 1 * *")
+)
+def fmp_dividends(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
+    symbols = fmp_company_profiles['symbol'].tolist()
+    df = pd.concat([handle_request(ticker) for ticker in symbols])
+    return df.dropna(how='all')
+
+def handle_request(ticker):
     BASE_URL = 'https://financialmodelingprep.com/api/v3/'
     url = BASE_URL + f'historical-price-full/stock_dividend/{ticker}?apikey=' + os.environ['FMP_API_KEY']
     response = requests.get(url)
-    data = json.loads(response.text).get('historical', [])
+    data = json.loads(response.text)['historical']
     df = pd.DataFrame(data)
     
     if df.empty:
