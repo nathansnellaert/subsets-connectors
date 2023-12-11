@@ -1,6 +1,6 @@
 import requests
 import os
-from dagster import DagsterEventType, EventRecordsFilter, asset, AssetKey
+from dagster import DagsterEventType, EventRecordsFilter, asset, AssetKey, FreshnessPolicy
 import pandas as pd
 from ratelimit import limits, sleep_and_retry
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -52,7 +52,7 @@ def get_category_tree(category_id, api_key):
         "name": "parent_id",
         "description": "Identifier of the parent category for nested categorization."
     }]
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 1 * *", maximum_lag_minutes=60 * 24 * 7))
 def fred_category_taxonomy() -> pd.DataFrame:
     api_key = os.getenv("FRED_API_KEY")
     categories = get_category_tree('0', api_key)
@@ -118,7 +118,7 @@ def fred_category_taxonomy() -> pd.DataFrame:
         "name": "category_id",
         "description": "Identifier of the category to which the data series belongs."
     }]
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 1 * *", maximum_lag_minutes=60 * 24 * 7))
 def fred_series_metadata(fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
     dfs = []
     for id, name in fred_category_taxonomy[['id', 'name']].values:
@@ -152,7 +152,7 @@ def fred_series_metadata(fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
         "name": "link",
         "description": "Link to more information about the data release, if available."
     }]
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * *", maximum_lag_minutes=60 * 24 * 7))
 def fred_releases() -> pd.DataFrame:
     api_key = os.getenv("FRED_API_KEY")
     url = f"https://api.stlouisfed.org/fred/releases?api_key={api_key}&file_type=json"
@@ -192,7 +192,6 @@ def fred_series_data_for_category(category_id: int, fred_series_metadata: pd.Dat
 
     return pd.concat(series_data, ignore_index=True)
 
-@asset
 def fred_series_money_banking_finance(fred_series_metadata: pd.DataFrame, fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
     return fred_series_data_for_category(32991, fred_series_metadata, fred_category_taxonomy)
 

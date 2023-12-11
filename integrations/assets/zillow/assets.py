@@ -1,4 +1,4 @@
-from dagster import asset
+from dagster import asset, FreshnessPolicy
 import pandas as pd
 
 def process_zillow_csv(df):
@@ -22,7 +22,7 @@ def process_zillow_csv(df):
     "source": "zillow",
     "name": "Zillow Home Value Index",
     "description": "Monthly Zillow Home Value Index data for metro areas.",
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))
 def zillow_home_value_index():
     url = "https://files.zillowstatic.com/research/public_csvs/zhvi/Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv"
     df = pd.read_csv(url)
@@ -32,7 +32,7 @@ def zillow_home_value_index():
     "source": "zillow",
     "name": "Zillow Observed Rent Index",
     "description": "Monthly Zillow Observed Rent Index data for metro areas.",
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))
 def zillow_observed_rent_index():
     url = "https://files.zillowstatic.com/research/public_csvs/zori/Metro_zori_sm_month.csv"
     df = pd.read_csv(url)
@@ -42,7 +42,7 @@ def zillow_observed_rent_index():
     "source": "zillow",
     "name": "Zillow Inventory for Sale",
     "description": "Monthly inventory for sale data for metro areas.",
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))
 def zillow_inventory_for_sale():
     url = "https://files.zillowstatic.com/research/public_csvs/invt_fs/Metro_invt_fs_uc_sfrcondo_sm_month.csv"
     df = pd.read_csv(url)
@@ -52,7 +52,7 @@ def zillow_inventory_for_sale():
     "source": "zillow",
     "name": "Zillow Median List Price",
     "description": "Monthly median list price data for metro areas.",
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))
 def zillow_median_list_price():
     url = "https://files.zillowstatic.com/research/public_csvs/mlp/Metro_mlp_uc_sfrcondo_sm_month.csv"
     df = pd.read_csv(url)
@@ -62,7 +62,7 @@ def zillow_median_list_price():
     "source": "zillow",
     "name": "Zillow Sales Count Now",
     "description": "Monthly sales count data for metro areas.",
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))
 def zillow_sales_count_now():
     url = "https://files.zillowstatic.com/research/public_csvs/sales_count_now/Metro_sales_count_now_uc_sfrcondo_month.csv"
     df = pd.read_csv(url)

@@ -1,4 +1,4 @@
-from dagster import asset
+from dagster import asset, FreshnessPolicy
 import pandas as pd
 import requests
 
@@ -6,7 +6,7 @@ import requests
     "source": "tsa",
     "name": "TSA checkpoint travel numbers",
     "description": "The number of travelers passing through TSA checkpoints per day.",
-})
+}, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * *", maximum_lag_minutes=60 * 24))
 def tsa_checkpoint_travel_numbers():
     url = "https://www.tsa.gov/travel/passenger-volumes"
     # 403 if directly using read_html, so load with requests
