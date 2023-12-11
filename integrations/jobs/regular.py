@@ -9,7 +9,7 @@ import integrations.assets.zillow.assets as zillow_assets
 import integrations.assets.ycombinator.assets as ycombinator_assets
 import integrations.assets.economist.assets as economist_assets
 import integrations.assets.worldbank.world_development_indicators as worldbank_world_development_indicators
-import integrations.assets.fmp.assets as fmp_assets
+import integrations.assets.fmp.end_of_day_prices as fmp_assets
 import integrations.assets.economist.assets as economist_assets
 from integrations.assets.unctad import (
     balance_of_payments,
