@@ -5,5 +5,15 @@ assets = load_assets_from_modules(modules=[fred_assets])
 
 job = define_asset_job(
     name='fred',
-    selection=assets
+    selection=assets,
+    tags={"concurrency_group": "fred"},
+    config={
+        "execution": {
+            "config": {
+                "multiprocess": {
+                    "max_concurrent": 1,
+                },
+            }
+        }
+    }
 )
