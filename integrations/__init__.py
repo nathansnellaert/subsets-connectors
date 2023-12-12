@@ -19,14 +19,7 @@ from integrations.jobs.wikipedia import job as wikipedia_job, assets as wikipedi
 
 ENV = os.environ.get("ENV", "dev")
 
-io_manager = None
-
-
-if ENV == 'dev':
-    io_manager = GCSParquetIOManager()
-else:
-    io_manager = FilesystemIOManager()
-
+io_manager = FilesystemIOManager() if ENV == 'test' else GCSParquetIOManager()
 
 defs = Definitions(
     assets=fmp_daily_partition_assets + fmp_yearly_partition_assets + fred_assets + regular_assets + wikipedia_assets + fmp_unpartitioned_assets,
