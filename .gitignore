@@ -3,4 +3,6 @@
 dev.ipynb
 build
 subsets_integrations.egg-info/**
-dagster.yaml
+history
+storage
+logs
