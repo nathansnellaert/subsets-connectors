@@ -6,8 +6,9 @@ from dagster import IOManager, InputContext, OutputContext, _check as check
 from io import BytesIO
 
 class GCSParquetIOManager(IOManager):
-    gcs_bucket_name: str = os.environ['GCS_BUCKET']
-    gcs_client = storage.Client()
+    def __init__(self, gcs_bucket_name: str = None):
+        self.gcs_bucket_name = gcs_bucket_name
+        self.gcs_client = storage.Client()
 
     def handle_output(self, context: OutputContext, obj: pd.DataFrame):
         gcs_path = self._get_gcs_path(context)
