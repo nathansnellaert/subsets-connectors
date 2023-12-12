@@ -1,10 +1,8 @@
 import warnings
-warnings.filterwarnings("ignore", category=ExperimentalWarning)
-
-import os
 from dagster import ExperimentalWarning, Definitions, FilesystemIOManager
+warnings.filterwarnings("ignore", category=ExperimentalWarning)
+import os
 from integrations.io_managers.gcs_parquet_io_manager import GCSParquetIOManager
-from integrations.io_managers.partitioned_parquet import LocalPartitionedParquetIOManager
 from integrations.io_managers.vanilla_partitioned_parquet import VanillaPartitionedParquetIOManager
 from integrations.jobs.fmp import (
     daily_partition_job as fmp_daily_partition_job,
@@ -21,15 +19,14 @@ from integrations.jobs.wikipedia import job as wikipedia_job, assets as wikipedi
 
 ENV = os.environ.get("ENV", "dev")
 
-if ENV == 'dev':
-    from dotenv import load_dotenv
-    load_dotenv()
-
 io_manager = None
-if ENV == 'test':
-    io_manager = FilesystemIOManager()
-else:
+
+
+if ENV == 'dev':
     io_manager = GCSParquetIOManager()
+else:
+    io_manager = FilesystemIOManager()
+
 
 defs = Definitions(
     assets=fmp_daily_partition_assets + fmp_yearly_partition_assets + fred_assets + regular_assets + wikipedia_assets + fmp_unpartitioned_assets,
