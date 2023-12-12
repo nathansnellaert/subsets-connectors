@@ -1,0 +1,15 @@
+run_queue:
+  tag_concurrency_limits:
+  - key: "concurrency_group"
+    value: wikipedia
+    limit: 2
+  - key: "concurrency_group"
+    value: fmp
+    limit: 4
+  max_concurrent_runs: 20
+telemetry:
+  enabled: false
+storage:
+  postgres:
+    postgres_url:
+      env: POSTGRES_URL

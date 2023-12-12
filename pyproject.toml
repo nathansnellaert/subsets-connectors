@@ -22,6 +22,7 @@ html5lib = "^1.1"
 beautifulsoup4 = "^4.12.2"
 pyarrow = "^14.0.1"
 google-cloud-storage = "^2.13.0"
+dagster-postgres = "^0.21.12"
 
 [build-system]
 requires = ["poetry-core"]
