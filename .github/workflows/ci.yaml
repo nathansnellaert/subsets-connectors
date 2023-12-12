@@ -9,6 +9,7 @@ jobs:
       PYTHONPATH: ${{ github.workspace }}
       DAGSTER_HOME: '/path/to/dagster/home' 
       DAGSTER_DATA_DIR: '/path/to/dagster/data' 
+      ENV: 'test'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
