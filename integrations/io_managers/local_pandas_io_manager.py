@@ -10,10 +10,12 @@ from dagster import (
     _check as check,
 )
 
-class PartitionedParquetIOManager(ConfigurableIOManager):
+class LocalPandasIOManager(ConfigurableIOManager):
+    base_path: str = os.environ['DAGSTER_DATA_DIR']
+
     @property
     def _base_path(self):
-        raise NotImplementedError()
+        return self.base_path    
 
     def handle_output(self, context: OutputContext, obj: pd.DataFrame):
         path = self._get_path(context)
@@ -50,11 +52,3 @@ class PartitionedParquetIOManager(ConfigurableIOManager):
         else:
             # Construct the file path using only the asset key
             return os.path.join(self._base_path, f"{key}.parquet")
-
-
-class LocalPartitionedParquetIOManager(PartitionedParquetIOManager):
-    base_path: str = os.environ['DAGSTER_DATA_DIR']
-
-    @property
-    def _base_path(self):
-        return self.base_path
