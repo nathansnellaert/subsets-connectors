@@ -5,7 +5,7 @@ from google.cloud import storage
 from dagster import IOManager, InputContext, OutputContext, _check as check
 from io import BytesIO
 
-class GCSParquetIOManager(IOManager):
+class GCSPandasIOManager(IOManager):
     def __init__(self, gcs_bucket_name: str = None):
         self.gcs_bucket_name = gcs_bucket_name
         self.gcs_client = storage.Client()
