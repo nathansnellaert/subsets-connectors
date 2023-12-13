@@ -3,7 +3,7 @@ from dagster import IOManager, OutputContext, InputContext
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-class VanillaPartitionedParquetIOManager(IOManager):
+class LocalPyArrowIOManager(IOManager):
     base_path: str = os.environ['DAGSTER_DATA_DIR']
 
     @property
