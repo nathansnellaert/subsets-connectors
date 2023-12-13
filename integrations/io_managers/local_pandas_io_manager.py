@@ -11,11 +11,9 @@ from dagster import (
 )
 
 class LocalPandasIOManager(ConfigurableIOManager):
-    base_path: str = os.environ['DAGSTER_DATA_DIR']
-
     @property
     def _base_path(self):
-        return self.base_path    
+        return os.environ['DAGSTER_DATA_DIR']  
 
     def handle_output(self, context: OutputContext, obj: pd.DataFrame):
         path = self._get_path(context)

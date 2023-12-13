@@ -4,11 +4,10 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 class LocalPyArrowIOManager(IOManager):
-    base_path: str = os.environ['DAGSTER_DATA_DIR']
 
     @property
     def _base_path(self):
-        return self.base_path
+        return os.environ['DAGSTER_DATA_DIR']
 
     def _get_path(self, context: OutputContext):
         key = context.asset_key.path[-1]
