@@ -532,7 +532,6 @@ runLauncher:
     # This configuration will only be used if the K8sRunLauncher is selected
     k8sRunLauncher:
       imagePullPolicy: "Always"
-
       ## The image to use for the launched Job's Dagster container.
       ## The `pullPolicy` field is ignored. Use`imagePullPolicy` instead.
       # image:
@@ -632,24 +631,23 @@ runLauncher:
       # Raw k8s configuration for the Kubernetes Job and Pod created for the run.
       # See: https://docs.dagster.io/deployment/guides/kubernetes/customizing-your-deployment
       #
-      # Example:
-      # runK8sConfig:
-      #   containerConfig: # raw config for the pod's main container
-      #     resources:
-      #       limits:
-      #         cpu: 100m
-      #         memory: 128Mi
-      #   podTemplateSpecMetadata: # raw config for the pod's metadata
-      #     annotations:
-      #       mykey: myvalue
-      #   podSpecConfig: # raw config for the spec of the launched's pod
-      #     nodeSelector:
-      #       disktype: ssd
-      #   jobSpecConfig: # raw config for the kubernetes job's spec
-      #     ttlSecondsAfterFinished: 7200
-      #   jobMetadata: # raw config for the kubernetes job's metadata
-      #     annotations:
-      #       mykey: myvalue
+      runK8sConfig:
+        containerConfig: # raw config for the pod's main container
+          resources:
+            limits:
+              cpu: 250m
+              memory: 512mi
+        # podTemplateSpecMetadata: 
+        #   annotations:
+        #     mykey: myvalue
+        # podSpecConfig:
+        #   nodeSelector:
+        #     disktype: ssd
+        jobSpecConfig: 
+          ttlSecondsAfterFinished: 0
+        # jobMetadata: # raw config for the kubernetes job's metadata
+        #   annotations:
+        #     mykey: myvalue
       runK8sConfig: {}
 
     # This configuration will only be used if the CeleryK8sRunLauncher is selected
@@ -845,7 +843,7 @@ postgresql:
 
   # When set, overrides the default `postgresql` scheme for the connection string.
   # (e.g., set to `postgresql+pg8000` to use the `pg8000` library).
-  # See: https://docs.sqlalchemy.org/en/13/dialects/postgresql.html#dialect-postgresql
+  # See: https://docs.sqlalchemy.o rg/en/13/dialects/postgresql.html#dialect-postgresql
   postgresqlScheme: ""
 
   service:
@@ -863,250 +861,6 @@ generatePostgresqlPasswordSecret: true
 # DAGSTER_CELERY_BACKEND_URL key.
 generateCeleryConfigSecret: true
 
-####################################################################################################
-# RabbitMQ: Configuration values for rabbitmq. Only one of RabbitMQ / Redis should be enabled.
-####################################################################################################
-rabbitmq:
-  enabled: false
-
-  image:
-    repository: "bitnami/rabbitmq"
-    tag: "3.8.12"
-    pullPolicy: IfNotPresent
-
-  rabbitmq:
-    username: test
-    password: test
-
-  service:
-    port: 5672
-
-  # https://github.com/helm/charts/issues/17250#issuecomment-533444837
-  volumePermissions:
-    enabled: true
-    image:
-      repository: bitnami/minideb
-      tag: stretch
-      pullPolicy: IfNotPresent
-
-####################################################################################################
-# Redis: Configuration values for Redis. Can be used instead of RabbitMQ.
-####################################################################################################
-redis:
-  # To use redis instead of rabbitmq, set `enabled` to true.
-  enabled: false
-
-  # To manage redis via helm, set `internal` to `true`. To use an external redis, set `internal` to `false`.
-  # Note: If `internal` is true, then redis pod will be created regardless of `enabled` flag.
-  internal: false
-
-  usePassword: false
-  password: "test"
-
-  # Redis host URL
-  host: ""
-
-  # Redis port
-  port: 6379
-
-  # Set DB number for Redis broker DB (default 0)
-  brokerDbNumber: 0
-
-  # Set DB number for Redis backend DB (default 0)
-  backendDbNumber: 0
-
-  # If your Redis connection needs configuration options, you can use this field to specific the
-  # exact connection URL needed, rather than letting it be constructed from the Helm values.
-  brokerUrl: ""
-  backendUrl: ""
-
-####################################################################################################
-# Flower: (Optional) The flower web interface for diagnostics and debugging Celery queues & workers
-####################################################################################################
-flower:
-  enabled: false
-
-  image:
-    repository: "docker.io/mher/flower"
-    tag: "0.9.5"
-    pullPolicy: Always
-
-  service:
-    type: ClusterIP
-    annotations: {}
-    port: 5555
-
-  # Support Node, affinity and tolerations for Flower pod assignment. See:
-  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  # https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  annotations: {}
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
-  podSecurityContext: {}
-  securityContext: {}
-
-  # Override the default K8s scheduler
-  # schedulerName: ~
-
-  resources: {}
-  # If you want to specify resources, uncomment the following lines, adjust them as necessary,
-  # and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-  # Liveness probe detects when to restart flower.
-  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes
-  livenessProbe:
-    tcpSocket:
-      port: "flower"
-    # initialDelaySeconds: 60
-    periodSeconds: 20
-    failureThreshold: 3
-
-  # Startup probe (available in kubernetes v1.16+) is used at pod startup. Once it has succeeded,
-  # then liveness probe takes over.
-  # If on kubernetes < v1.16, then comment out `startupProbe` lines and comment in
-  # `initialDelaySeconds: 60` under `livenessProbe`
-  startupProbe:
-    tcpSocket:
-      port: "flower"
-    periodSeconds: 10
-    failureThreshold: 6
-
-####################################################################################################
-# Ingress: (Optional) Create ingresses for the Dagster webserver and Flower
-####################################################################################################
-ingress:
-  enabled: false
-
-  annotations: {}
-  labels: {}
-
-  # Specify the IngressClass used to implement this ingress.
-  #
-  # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
-  ingressClassName: ~
-
-  dagsterWebserver:
-    # Ingress hostname for the webserver e.g. dagster.mycompany.com
-    # This variable allows customizing the route pattern in the ingress. Some
-    # ingress controllers may only support "/", whereas some may need "/*".
-    path: "/*"
-    pathType: ImplementationSpecific
-    # NOTE: do NOT keep trailing slash. For root configuration, set as empty string
-    # See: https://github.com/dagster-io/dagster/issues/2073
-    host: ""
-
-    tls:
-      enabled: false
-      secretName: ""
-
-    # Different http paths to add to the ingress before the default webserver path
-    # Example:
-    #
-    # precedingPaths:
-    #   - path: "/*"
-    #     pathType: ImplementationSpecific
-    #     serviceName: "ssl-redirect"
-    #     servicePort: "use-annotation"
-    precedingPaths: []
-
-    # Different http paths to add to the ingress after the default webserver path
-    # Example:
-    #
-    # succeedingPaths:
-    #   - path: "/*"
-    #     pathType: ImplementationSpecific
-    #     serviceName: "ssl-redirect"
-    #     servicePort: "use-annotation"
-    succeedingPaths: []
-
-  readOnlyDagsterWebserver:
-    # Ingress hostname for read only webserver e.g. viewer.dagster.mycompany.com
-    # This variable allows customizing the route pattern in the ingress. Some
-    # ingress controllers may only support "/", whereas some may need "/*".
-    path: "/*"
-    pathType: ImplementationSpecific
-    # NOTE: do NOT keep trailing slash. For root configuration, set as empty string
-    # See: https://github.com/dagster-io/dagster/issues/2073
-    host: ""
-
-    tls:
-      enabled: false
-      secretName: ""
-
-    # Different http paths to add to the ingress before the default webserver path
-    # Example:
-    #
-    # precedingPaths:
-    #   - path: "/*"
-    #     pathType: ImplementationSpecific
-    #     serviceName: "ssl-redirect"
-    #     servicePort: "use-annotation"
-    precedingPaths: []
-
-    # Different http paths to add to the ingress after the default webserver path
-    # Example:
-    #
-    # succeedingPaths:
-    #   - path: "/*"
-    #     pathType: ImplementationSpecific
-    #     serviceName: "ssl-redirect"
-    #     servicePort: "use-annotation"
-    succeedingPaths: []
-
-  flower:
-    # Ingress hostname for Flower e.g. flower.mycompany.com
-    host: ""
-    # if path is '/flower', Flower will be accessible at 'mycompany.com/flower'
-    # NOTE: do NOT keep trailing slash. For root configuration, set as empty string
-    path: ""
-    pathType: ImplementationSpecific
-
-    tls:
-      enabled: false
-      secretName: ""
-
-    # Different http paths to add to the ingress before the default flower path
-    # Example:
-    #
-    # precedingPaths:
-    #   - path: "/*"
-    #     pathType: ImplementationSpecific
-    #     serviceName: "ssl-redirect"
-    #     servicePort: "use-annotation"
-    precedingPaths: []
-
-    # Different http paths to add to the ingress after the default flower path
-    # Example:
-    #
-    # succeedingPaths:
-    #   - path: "/*"
-    #     pathType: ImplementationSpecific
-    #     serviceName: "ssl-redirect"
-    #     servicePort: "use-annotation"
-    succeedingPaths: []
-
-####################################################################################################
-# Dagster Daemon (Optional) Deploy a daemon for launching queued runs and running schedules and
-# sensors.
-#
-# By default, this daemon is included in your deployment and used to run schedules and sensors.
-# Setting `enabled` to false will stop the daemon from being included in your deployment.
-#
-# Each thread in the daemon periodically sends heartbeats to indicate that it is still running.
-# Setting `heartbeatTolerance` lets you configure how long each thread can run without sending
-# a heartbeat before the daemon determines that one must be hanging and restarts the process.
-#
-# Setting `config.queuedRunCoordinator.maxConcurrentRuns` in `runCoordinator` allows you to set
-# limits on the total number of runs that can execute at once.
-####################################################################################################
 dagsterDaemon:
   enabled: true
 
