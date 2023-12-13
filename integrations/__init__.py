@@ -2,7 +2,7 @@ import warnings
 from dagster import ExperimentalWarning, Definitions, FilesystemIOManager
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 import os
-from integrations.io_managers.gcs_parquet_io_manager import GCSParquetIOManager
+from integrations.io_managers.gcs_pandas_io_manager import GCSParquetIOManager
 from integrations.io_managers.vanilla_partitioned_parquet import VanillaPartitionedParquetIOManager
 from integrations.jobs.fmp import (
     daily_partition_job as fmp_daily_partition_job,
