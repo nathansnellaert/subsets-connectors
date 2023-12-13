@@ -609,14 +609,13 @@ runLauncher:
       # https://kubernetes.io/docs/concepts/configuration/manage-resources-containers
       #
       # Example:
-      # resources:
-      #   limits:
-      #     cpu: 100m
-      #     memory: 128Mi
-      #   requests:
-      #     cpu: 100m
-      #     memory: 128Mi
-      resources: {}
+      resources:
+        limits:
+          cpu: 1000m
+          memory: 4Gi
+        requests:
+          cpu: 250m
+          memory: 1Gi
 
       # Override the default K8s scheduler for launched Pods
       # schedulerName: ~
@@ -632,11 +631,11 @@ runLauncher:
       # See: https://docs.dagster.io/deployment/guides/kubernetes/customizing-your-deployment
       #
       runK8sConfig:
-        containerConfig: # raw config for the pod's main container
-          resources:
-            limits:
-              cpu: 250m
-              memory: 512mi
+        # containerConfig: # raw config for the pod's main container
+          # resources:
+          #   limits:
+          #     cpu: 1000m
+          #     memory: 2Gi
         # podTemplateSpecMetadata: 
         #   annotations:
         #     mykey: myvalue
@@ -644,11 +643,10 @@ runLauncher:
         #   nodeSelector:
         #     disktype: ssd
         jobSpecConfig: 
-          ttlSecondsAfterFinished: 0
+          ttlSecondsAfterFinished: 30
         # jobMetadata: # raw config for the kubernetes job's metadata
         #   annotations:
         #     mykey: myvalue
-      runK8sConfig: {}
 
     # This configuration will only be used if the CeleryK8sRunLauncher is selected
     celeryK8sRunLauncher:
@@ -886,12 +884,16 @@ dagsterDaemon:
     config:
       queuedRunCoordinator:
         # The maximum number of runs to allow to be running at once. Defaults to no limit.
-        maxConcurrentRuns: 3
+        maxConcurrentRuns: 20
         # Tag based concurrency limits. See https://docs.dagster.io/deployment/run-coordinator#usage
         # for examples.
-        tagConcurrencyLimits: []
-        # How frequently in seconds to check for new runs to pull from the queue and launch.
-        # Defaults to 5.
+        tagConcurrencyLimits:
+        - key: "concurrency_group"
+          value: wikipedia
+          limit: 4
+        - key: "concurrency_group"
+          value: fmp
+          limit: 4
         dequeueIntervalSeconds: ~
         # Whether to dequeue runs using an asynchronous thread pool, allowing multiple runs
         # to be dequeued in parallel.
