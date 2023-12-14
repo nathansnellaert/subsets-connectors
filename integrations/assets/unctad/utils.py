@@ -3,11 +3,18 @@ import py7zr
 import io
 import pandas as pd
 
-def download_dataset(path, dtypes=None):
-    base_url = "https://unctadstat.unctad.org/7zip"
-    url = f"{base_url}/{path}.csv.7z"
-    response = requests.get(url)
-    archive_data = io.BytesIO(response.content)
+def download_dataset(dataset, dtypes=None):
+
+    # new version replaces '_' with '.', patch in download utility for now
+    dataset = dataset.replace('_', '.')    
+
+    # first, get the file id for the dataset
+    file_id_resp = requests.get(f'https://unctadstat-api.unctad.org/api/reportMetadata/{dataset}/bulkfiles/en')
+    file_id = file_id_resp.json()[0]['fileId']
+
+    # load the dataset using the file id
+    dataset = requests.get(f"https://unctadstat-api.unctad.org/api/reportMetadata/US.MerchVolumeQuarterly/bulkfile/{file_id}/en")
+    archive_data = io.BytesIO(dataset.content)
 
     csv_files = {}
     with py7zr.SevenZipFile(archive_data, mode='r') as archive:
