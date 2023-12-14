@@ -890,7 +890,7 @@ dagsterDaemon:
         tagConcurrencyLimits:
         - key: "concurrency_group"
           value: wikipedia
-          limit: 4
+          limit: 8
         - key: "concurrency_group"
           value: fmp
           limit: 4
