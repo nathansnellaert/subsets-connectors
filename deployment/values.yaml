@@ -643,7 +643,7 @@ runLauncher:
         #   nodeSelector:
         #     disktype: ssd
         jobSpecConfig: 
-          ttlSecondsAfterFinished: 30
+          ttlSecondsAfterFinished: 900
         # jobMetadata: # raw config for the kubernetes job's metadata
         #   annotations:
         #     mykey: myvalue
