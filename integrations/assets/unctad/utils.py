@@ -5,7 +5,7 @@ import pandas as pd
 
 def download_dataset(dataset, dtypes=None):
 
-    # new version replaces '_' with '.', patch in download utility for now
+    # new version uses '.' in dataset name rather than '.', patch in download utility for now
     dataset = dataset.replace('_', '.')    
 
     # first, get the file id for the dataset
