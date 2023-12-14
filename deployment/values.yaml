@@ -614,8 +614,8 @@ runLauncher:
           cpu: 1000m
           memory: 4Gi
         requests:
-          cpu: 250m
-          memory: 1Gi
+          cpu: 100m
+          memory: 256Mi
 
       # Override the default K8s scheduler for launched Pods
       # schedulerName: ~
