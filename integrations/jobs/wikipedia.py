@@ -6,5 +6,21 @@ assets = load_assets_from_modules(modules=[wikimedia_assets])
 job = define_asset_job(
     name='wikipedia',
     selection=assets,
-    tags={"concurrency_group": "wikipedia"}
+    tags={
+        "concurrency_group": "wikipedia",
+        "dagster-k8s/config": {
+            "container_config": {
+                "resources": {
+                    "requests": {
+                        "cpu": "1000m",
+                        "memory": "4Gi"
+                    },
+                    "limits": {
+                        "cpu": "1000m",
+                        "memory": "4Gi"
+                    }
+                }
+            }
+        }
+    }
 )
