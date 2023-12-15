@@ -17,7 +17,7 @@ from integrations.jobs.fmp import (
 from integrations.jobs.fred import job as fred_job, assets as fred_assets
 from integrations.jobs.regular import job as regular_job, assets as regular_assets
 from integrations.jobs.wikipedia import job as wikipedia_job, assets as wikipedia_assets
-
+from integrations.jobs.internal import job as internal_job, assets as internal_assets
 
 ENV = os.environ.get("ENV", "dev")
 
@@ -25,8 +25,8 @@ pandas_io_manager = LocalPandasIOManager() if ENV == 'test' else GCSPandasIOMana
 pyarrow_io_manager = LocalPyArrowIOManager() if ENV == 'test' else GCSPyArrowIOManager(os.environ['GCS_BUCKET'])
 
 defs = Definitions(
-    assets=fmp_daily_partition_assets + fmp_yearly_partition_assets + fred_assets + regular_assets + wikipedia_assets + fmp_unpartitioned_assets,
-    jobs=[fmp_daily_partition_job, fmp_yearly_partition_job, fred_job, regular_job, wikipedia_job, fmp_unpartitioned_job],
+    assets=fmp_daily_partition_assets + fmp_yearly_partition_assets + fmp_unpartitioned_assets + fred_assets + regular_assets + wikipedia_assets + internal_assets,
+    jobs=[fmp_daily_partition_job, fmp_yearly_partition_job, fmp_unpartitioned_job, fred_job, regular_job, wikipedia_job, internal_job],
     resources={
         "io_manager": pandas_io_manager,
         "vanilla_parquet_io_manager": pyarrow_io_manager 
