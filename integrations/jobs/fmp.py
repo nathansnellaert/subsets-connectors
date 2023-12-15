@@ -38,15 +38,15 @@ import integrations.assets.fmp.esg_scores as esg_scores_assets
 #     }
 # )
 
-daily_partition_assets = [fmp_assets.fmp_eod_prices, fmp_assets.indices_prices, fmp_assets.commodity_prices, fmp_assets.cryptocurrency_prices, fmp_assets.forex_prices]
+fmp_eod_assets = [fmp_assets.fmp_eod_prices, fmp_assets.indices_prices, fmp_assets.commodity_prices, fmp_assets.cryptocurrency_prices, fmp_assets.forex_prices]
 
-daily_partition_job = define_asset_job(
-    name='daily_partition_job',
-    selection=daily_partition_assets,
+fmp_eod_job = define_asset_job(
+    name='fmp_eod_assets',
+    selection=fmp_eod_assets,
     tags={"concurrency_group": "fmp"}
 )
 
-unpartitioned_assets = load_assets_from_modules(
+fmp_unpartitioned_assets = load_assets_from_modules(
     modules=[
         dividends_assets,
         cash_flow_statements_assets,
@@ -60,12 +60,11 @@ unpartitioned_assets = load_assets_from_modules(
         executive_compensation_assets,
         market_cap_assets,
         esg_scores_assets,
-
     ]
 )
 
-unpartitioned_job = define_asset_job(
-    name='unpartitioned_job',
-    selection=unpartitioned_assets,
+fmp_unpartitioned_assets_job = define_asset_job(
+    name='fmp_unpartitioned_assets',
+    selection=fmp_unpartitioned_assets,
     tags={"concurrency_group": "fmp"}
 )
