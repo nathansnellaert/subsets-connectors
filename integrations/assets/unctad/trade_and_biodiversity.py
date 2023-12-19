@@ -5,7 +5,7 @@ from .utils import download_dataset
     "source": "unctad",
     "name": "Trade and Biodiversity - Trade in thousands of United States dollars, annual (~900MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerch.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_trade_in_thousands_of_united_states_dollars_annual():
     return download_dataset('US_BiotradeMerch')
     
@@ -14,7 +14,7 @@ def trade_and_biodiversity_trade_in_thousands_of_united_states_dollars_annual():
     "source": "unctad",
     "name": "Trade and Biodiversity - Trade, growth rates, annual (~900MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchGR.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_trade_growth_rates_annual():
     return download_dataset('US_BiotradeMerchGR')
     
@@ -23,7 +23,7 @@ def trade_and_biodiversity_trade_growth_rates_annual():
     "source": "unctad",
     "name": "Trade and Biodiversity - Trade balance in thousands of United States dollars, annual (~350MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchB.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_trade_balance_in_thousands_of_united_states_dollars_annual():
     return download_dataset('US_BiotradeMerch_B')
     
@@ -32,7 +32,7 @@ def trade_and_biodiversity_trade_balance_in_thousands_of_united_states_dollars_a
     "source": "unctad",
     "name": "Trade and Biodiversity - Trade balance, growth rates, annual (~300MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchGRB.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_trade_balance_growth_rates_annual():
     return download_dataset('US_BiotradeMerchGR_B')
     
@@ -41,7 +41,7 @@ def trade_and_biodiversity_trade_balance_growth_rates_annual():
     "source": "unctad",
     "name": "Trade and Biodiversity - Trade of priority products in thousands of United States dollars, annual (~600MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchPrioProdGR.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_trade_of_priority_products_in_thousands_of_united_states_dollars_annual():
     return download_dataset('US_BiotradeMerchPrioProdGR')
     
@@ -50,7 +50,7 @@ def trade_and_biodiversity_trade_of_priority_products_in_thousands_of_united_sta
     "source": "unctad",
     "name": "Trade and Biodiversity - Trade of priority products, growth rates, annual (~500MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchPrioProd.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_trade_of_priority_products_growth_rates_annual():
     return download_dataset('US_BiotradeMerchPrioProd')
     
@@ -59,7 +59,7 @@ def trade_and_biodiversity_trade_of_priority_products_growth_rates_annual():
     "source": "unctad",
     "name": "Trade and Biodiversity - Biotrade as percentage of total trade, annual (~10MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchShare.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_biotrade_as_percentage_of_total_trade_annual():
     return download_dataset('US_BiotradeMerchShare')
     
@@ -68,7 +68,7 @@ def trade_and_biodiversity_biotrade_as_percentage_of_total_trade_annual():
     "source": "unctad",
     "name": "Trade and Biodiversity - Biotrade as percentage of Gross Domestic Product, annual (~10KB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBioTradeMerchGDPShare.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_biotrade_as_percentage_of_gross_domestic_product_annual():
     return download_dataset('US_BioTradeMerchGDPShare')
     
@@ -77,7 +77,7 @@ def trade_and_biodiversity_biotrade_as_percentage_of_gross_domestic_product_annu
     "source": "unctad",
     "name": "Trade and Biodiversity - Product concentration indices of exports and imports, annual (~20KB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBioTradeMerchProdConcent.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_product_concentration_indices_of_exports_and_imports_annual():
     return download_dataset('US_BioTradeMerchProdConcent')
     
@@ -86,7 +86,7 @@ def trade_and_biodiversity_product_concentration_indices_of_exports_and_imports_
     "source": "unctad",
     "name": "Trade and Biodiversity - Market concentration indices of exports and imports of products, annual (~300KB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBioTradeMerchMarketConcent.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_market_concentration_indices_of_exports_and_imports_of_products_annual():
     return download_dataset('US_BioTradeMerchMarketConcent')
     
@@ -95,7 +95,7 @@ def trade_and_biodiversity_market_concentration_indices_of_exports_and_imports_o
     "source": "unctad",
     "name": "Trade and Biodiversity - Market structural change indices of exports and imports of products, annual (~300KB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBioTradeMerchStructChange.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_market_structural_change_indices_of_exports_and_imports_of_products_annual():
     return download_dataset('US_BioTradeMerchStructChange')
     
@@ -104,7 +104,7 @@ def trade_and_biodiversity_market_structural_change_indices_of_exports_and_impor
     "source": "unctad",
     "name": "Trade and Biodiversity - Revealed comparative advantage index, annual (~15MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchRCA.",
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def trade_and_biodiversity_revealed_comparative_advantage_index_annual():
     return download_dataset('US_BiotradeMerchRCA')
     

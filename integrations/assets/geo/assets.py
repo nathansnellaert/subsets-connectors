@@ -197,7 +197,7 @@ def organisation():
         "name": "lon",
         "description": "Longitude coordinate of the US state"
     }]
-})
+}, io_manager_key="vanilla_parquet_io_manager")
 def us_states():
     url = "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/georef-united-states-of-america-state/exports/csv?"
     states = pd.read_csv(url, sep=';')
