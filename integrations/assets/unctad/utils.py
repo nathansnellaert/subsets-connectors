@@ -5,8 +5,8 @@ import pandas as pd
 
 def download_dataset(dataset, dtypes=None):
 
-    # new version uses '.' in dataset name rather than '.', patch in download utility for now
-    dataset = dataset.replace('_', '.')    
+    # replace the first underscore with a dot
+    dataset = dataset.replace('_', '.', 1)
 
     # first, get the file id for the dataset
     file_id_resp = requests.get(f'https://unctadstat-api.unctad.org/api/reportMetadata/{dataset}/bulkfiles/en')
