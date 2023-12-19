@@ -45,8 +45,8 @@ import integrations.assets.fmp.analysts as analysts_assets
 
 fmp_eod_assets = [fmp_assets.fmp_eod_prices, fmp_assets.indices_prices, fmp_assets.commodity_prices, fmp_assets.cryptocurrency_prices, fmp_assets.forex_prices]
 
-daily_partition_job = define_asset_job(
-    name='daily_partition_job',
+fmp_eod_job = define_asset_job(
+    name='fmp_eod_assets',
     selection=fmp_eod_assets,
     tags={
         "concurrency_group": "fmp",
