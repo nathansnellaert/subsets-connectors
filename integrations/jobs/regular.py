@@ -9,26 +9,7 @@ import integrations.assets.zillow.assets as zillow_assets
 import integrations.assets.ycombinator.assets as ycombinator_assets
 import integrations.assets.economist.assets as economist_assets
 import integrations.assets.worldbank.world_development_indicators as worldbank_world_development_indicators
-import integrations.assets.fmp.end_of_day_prices as fmp_assets
 import integrations.assets.economist.assets as economist_assets
-from integrations.assets.unctad import (
-    balance_of_payments,
-    commodity_prices,
-    creative_economy,
-    digital_economy,
-    inflation_and_exchange_rates,
-    international_merchandise_trade,
-    international_trade_in_services,
-    maritime_transport,
-    output_and_income,
-    plastics_trade,
-    population,
-    productive_capacities,
-    public_finance,
-    technology_and_innovation,
-    trade_and_biodiversity,
-    transport_costs,
-)
 
 
 assets = load_assets_from_modules([
@@ -38,22 +19,6 @@ assets = load_assets_from_modules([
     zillow_assets,
     ycombinator_assets,
     economist_assets,
-    balance_of_payments,
-    commodity_prices,
-    creative_economy,
-    digital_economy,
-    inflation_and_exchange_rates,
-    international_merchandise_trade,
-    international_trade_in_services,
-    maritime_transport,
-    output_and_income,
-    plastics_trade,
-    population,
-    productive_capacities,
-    public_finance,
-    technology_and_innovation,
-    trade_and_biodiversity,
-    transport_costs,
     worldbank_world_development_indicators,
 ])
 
