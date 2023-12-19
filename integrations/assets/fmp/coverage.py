@@ -152,3 +152,45 @@ def delisted_company_symbols():
     data = json.loads(response.text)
     symbols = [entry['symbol'] for entry in data]
     return symbols
+
+
+# Asset for FMP CIK List data
+@asset(
+    metadata={
+        "source": "Financial Modeling Prep",
+        "name": "CIK List Data",
+        "description": "Provides a comprehensive database of CIK numbers for SEC-registered entities.",
+        "columns": [
+            {"name": "cik", "type": "string", "description": "Central Index Key (CIK) number, a unique identifier for each SEC-registered entity."},
+            {"name": "name", "type": "string", "description": "Name of the SEC-registered entity."}
+        ]
+    }
+)
+def cik_list() -> pd.DataFrame:
+    url = 'https://financialmodelingprep.com/api/v3/cik_list'
+    response = requests.get(url)
+    data = response.json()
+    df = pd.DataFrame(data)
+    return df
+
+
+@asset(
+    metadata={
+        "source": "Financial Modeling Prep",
+        "name": "Symbol Changes Data",
+        "description": "Tracks symbol changes due to mergers, acquisitions, stock splits, and name changes.",
+        "columns": [
+            {"name": "date", "type": "date", "description": "Date of the symbol change."},
+            {"name": "name", "type": "string", "description": "Name of the company."},
+            {"name": "oldSymbol", "type": "string", "description": "Old ticker symbol of the company."},
+            {"name": "newSymbol", "type": "string", "description": "New ticker symbol of the company."}
+        ]
+    }
+)
+def fmp_symbol_changes() -> pd.DataFrame:
+    url = 'https://financialmodelingprep.com/api/v4/symbol_change'
+    response = requests.get(url)
+    data = response.json()
+    df = pd.DataFrame(data)
+    df['date'] = pd.to_datetime(df['date']).dt.date  # Converting date to datetime format
+    return df
