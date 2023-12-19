@@ -15,6 +15,11 @@ import integrations.assets.fmp.earnings_suprise as earnings_suprise_assets
 import integrations.assets.fmp.executive_compensation as executive_compensation_assets
 import integrations.assets.fmp.market_cap as market_cap_assets
 import integrations.assets.fmp.esg_scores as esg_scores_assets
+import integrations.assets.fmp.insider_trading as insider_trading_assets
+import integrations.assets.fmp.upgrades_downgrades as upgrades_downgrades_assets
+import integrations.assets.fmp.institutional_ownership as institutional_ownership_assets
+import integrations.assets.fmp.stock_grade as stock_grade_assets
+import integrations.assets.fmp.analysts as analysts_assets
 
 # yearly_partition_assets = [
 #     fmp_assets.fmp_cash_flow_statement,
@@ -60,6 +65,11 @@ fmp_unpartitioned_assets = load_assets_from_modules(
         executive_compensation_assets,
         market_cap_assets,
         esg_scores_assets,
+        insider_trading_assets,
+        upgrades_downgrades_assets,
+        institutional_ownership_assets,
+        stock_grade_assets,
+        analysts_assets
     ]
 )
 
