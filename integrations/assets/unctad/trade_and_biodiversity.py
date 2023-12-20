@@ -3,58 +3,13 @@ from .utils import download_dataset
 
 @asset(metadata={
     "source": "unctad",
-    "name": "Trade in thousands of United States dollars, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerch.",
-}, io_manager_key="vanilla_parquet_io_manager")
-def trade_in_thousands_of_united_states_dollars_annual():
-    return download_dataset('US_BiotradeMerch')
-    
-
-@asset(metadata={
-    "source": "unctad",
     "name": "Trade, growth rates, annual",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchGR.",
 }, io_manager_key="vanilla_parquet_io_manager")
 def trade_growth_rates_annual():
     return download_dataset('US_BiotradeMerchGR')
     
-
-@asset(metadata={
-    "source": "unctad",
-    "name": "Trade balance in thousands of United States dollars",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchB.",
-}, io_manager_key="vanilla_parquet_io_manager")
-def trade_balance_in_thousands_of_united_states_dollars_annual():
-    return download_dataset('US_BiotradeMerch_B')
-    
-
-@asset(metadata={
-    "source": "unctad",
-    "name": "Trade balance, growth rates, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchGRB.",
-}, io_manager_key="vanilla_parquet_io_manager")
-def trade_balance_growth_rates_annual():
-    return download_dataset('US_BiotradeMerchGR_B')
-    
-
-@asset(metadata={
-    "source": "unctad",
-    "name": "Trade of priority products in thousands of United States dollars, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchPrioProdGR.",
-}, io_manager_key="vanilla_parquet_io_manager")
-def trade_of_priority_products_in_thousands_of_united_states_dollars_annual():
-    return download_dataset('US_BiotradeMerchPrioProdGR')
-    
-
-@asset(metadata={
-    "source": "unctad",
-    "name": "Trade of priority products, growth rates, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchPrioProd.",
-}, io_manager_key="vanilla_parquet_io_manager")
-def trade_of_priority_products_growth_rates_annual():
-    return download_dataset('US_BiotradeMerchPrioProd')
-    
-
+            
 @asset(metadata={
     "source": "unctad",
     "name": "Biotrade as percentage of total trade, annual",
