@@ -13,11 +13,11 @@ job = define_asset_job(
                 "resources": {
                     "requests": {
                         "cpu": "1000m",
-                        "memory": "4Gi"
+                        "memory": "6Gi"
                     },
                     "limits": {
                         "cpu": "1000m",
-                        "memory": "4Gi"
+                        "memory": "6Gi"
                     }
                 }
             }
