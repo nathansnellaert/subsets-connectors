@@ -18,7 +18,6 @@ from integrations.assets.unctad import (
     public_finance,
     technology_and_innovation,
     trade_and_biodiversity,
-    transport_costs,
 )
 
 
@@ -38,7 +37,6 @@ assets = load_assets_from_modules([
     public_finance,
     technology_and_innovation,
     trade_and_biodiversity,
-    transport_costs,
 ])
 
 job = define_asset_job(
