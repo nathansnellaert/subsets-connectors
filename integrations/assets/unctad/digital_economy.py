@@ -71,7 +71,7 @@ def core_indicators_on_ict_use_in_business_by_industrial_classification_of_econo
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USDigitallyDeliverableService.",
 }, io_manager_key="vanilla_parquet_io_manager")
 def international_trade_in_digitally_deliverable_services_value_shares_and_growth_annual_1mb_():
-    return download_dataset('US_DigitallyDeliverableService')
+    return download_dataset('US_DigitallyDeliverableServices')
     
 
 @asset(metadata={
