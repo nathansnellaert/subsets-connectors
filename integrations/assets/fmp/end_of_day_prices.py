@@ -23,8 +23,9 @@ def make_request(path) -> pd.DataFrame:
 @asset(partitions_def=DailyPartitionsDefinition(start_date="2014-01-01"))
 def fmp_eod_prices(context) -> pd.DataFrame:
     path = f'batch-request-end-of-day-prices?date={context.partition_key}&apikey=' + os.environ['FMP_API_KEY']
-    return make_request(path)
-
+    df =  make_request(path)
+    df['volume'] = df['volume'].astype(int)
+    return df
 
 @asset(partitions_def=DailyPartitionsDefinition(start_date="2014-01-01"))
 def cryptocurrency_prices(fmp_crypto_symbols: pd.DataFrame, fmp_eod_prices: pd.DataFrame) -> pd.DataFrame:
