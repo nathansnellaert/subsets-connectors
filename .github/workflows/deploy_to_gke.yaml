@@ -17,7 +17,7 @@ jobs:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
 
     - name: Set up kubectl
-      uses: google-github-actions/get-gke-credentials@v0
+      uses: google-github-actions/get-gke-credentials@v2
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         location: ${{ secrets.GKE_CLUSTER_LOCATION }}
