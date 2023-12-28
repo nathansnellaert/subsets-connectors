@@ -24,3 +24,16 @@ jobs:
       run: poetry install
     - name: Run tests
       run: poetry run pytest
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+    - name: Submit to Cloud Build
+      run: |
+        gcloud builds submit --config cloudbuild.yaml \
+          --substitutions=_CODE_CONTAINER_IMAGE_TAG=${{ secrets.CODE_CONTAINER_IMAGE_TAG }}

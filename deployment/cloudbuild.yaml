@@ -1,0 +1,9 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  dir: packages/server
+  args: [ 'build', '--no-cache', '-t', '${CODE_CONTAINER_IMAGE_TAG}', '.' ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', '${CODE_CONTAINER_IMAGE_TAG}']
+- name: "gcr.io/cloud-builders/gcloud"
