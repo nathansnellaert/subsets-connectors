@@ -1,7 +1,9 @@
 name: Deploy to GKE
 
-# temp to test the action, will be changed with on main merge later
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
