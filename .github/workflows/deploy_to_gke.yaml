@@ -28,4 +28,4 @@ jobs:
         cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
 
     - name: Update Kubernetes Deployment
-      run: kubectl rollout restart deployment/pipelines
+      run: kubectl rollout restart deployment/dagster-dagster-user-deployments-subsets-connectors
