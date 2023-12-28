@@ -1,0 +1,33 @@
+name: Deploy to GKE
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+
+    - name: Authenticate gcloud CLI
+      run: echo '${{ secrets.GCP_SA_KEY }}' | gcloud auth activate-service-account --key-file=-
+
+    - name: Set up kubectl
+      uses: google-github-actions/get-gke-credentials@v0
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        location: ${{ secrets.GKE_CLUSTER_LOCATION }}
+        cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
+
+    - name: Update Kubernetes Deployment
+      run: kubectl rollout restart deployment/dagster-dagster-user-deployments-subsets-connectors
