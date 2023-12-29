@@ -97,19 +97,19 @@ def fmp_company_profiles():
 
 @asset
 def fmp_commodity_symbols() -> pd.DataFrame:
-    return make_v3_request('available-commodities', {})
+    return make_v3_request('symbol/available-commodities', {})
 
 @asset
 def fmp_crypto_symbols() -> pd.DataFrame:
-    return make_v3_request('available-cryptocurrencies', {})
+    return make_v3_request('symbol/available-cryptocurrencies', {})
 
 @asset
 def fmp_forex_symbols() -> pd.DataFrame:
-    return make_v3_request('available-forex-currency-pairs', {})
+    return make_v3_request('symbol/available-forex-currency-pairs', {})
 
 @asset
 def fmp_indices_symbols() -> list:
-    return make_v3_request('available-indexes', {})
+    return make_v3_request('symbol/available-indexes', {})
 
 @asset
 def fmp_etf_symbols():
