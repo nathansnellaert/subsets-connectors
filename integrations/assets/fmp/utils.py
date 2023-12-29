@@ -13,7 +13,7 @@ def make_v4_request(route, args):
     return df
 
 def make_v3_request(route, args):
-    BASE_URL = 'https://financialmodelingprep.com/api/v4/'
+    BASE_URL = 'https://financialmodelingprep.com/api/v3/'
     default_args = {
         "apikey": os.environ['FMP_API_KEY'],
         "datatype": "csv",
