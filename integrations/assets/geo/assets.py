@@ -1,5 +1,6 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
+from .country_code_2_to_simple_name import mapping
 
 @asset(metadata={
     "source": "github",
@@ -73,6 +74,7 @@ def countries(context):
     }
     df = df[list(keep_cols.keys())]
     df = df.rename(columns=keep_cols)
+    df['country_name_simple'] = df['country_code2'].apply(lambda x: mapping.get(x, x))
     context.log.info(f"Loaded {len(df)} countries")
     return df
 
