@@ -4,7 +4,8 @@ from .utils import make_v4_request
 
 def handle_request(year):
     df = make_v4_request('key-metrics-bulk', {'year': year, 'period': 'quarter'})
-    
+    if df.empty:
+        return df
     column_name_mapping = 	{
 	    "symbol": "symbol",
 	    "date": "date",

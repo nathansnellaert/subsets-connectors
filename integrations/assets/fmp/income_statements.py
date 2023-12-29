@@ -62,6 +62,8 @@ def fmp_income_statement():
             "year": year,
             "period": "quarter",
         })
+        if df.empty:
+            return df
         column_name_mapping = {
             "date": "date",
             "symbol": "symbol",

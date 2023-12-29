@@ -4,7 +4,8 @@ from .utils import make_v4_request
 
 def handle_request(ticker):
     df = make_v4_request('senate-trading', {'symbol': ticker})
-    
+    if df.empty:
+        return df
     column_name_mapping = {
         "firstName": "first_name",
         "lastName": "last_name",

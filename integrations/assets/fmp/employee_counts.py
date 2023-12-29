@@ -28,7 +28,8 @@ def fmp_employee_counts(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
 
 def handle_request(ticker):
     df = make_v4_request('historical/employee_count', {'symbol': ticker})
-
+    if df.empty:
+        return df
     column_name_mapping = {
         "symbol": "symbol",
         "cik": "cik",

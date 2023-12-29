@@ -30,7 +30,8 @@ def fmp_upgrades_downgrades(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
 
 def handle_request(ticker):
     df = make_v4_request('upgrades-downgrades', {'symbol': ticker})
-    
+    if df.empty:
+        return df
     column_name_mapping = {
         "symbol": "symbol",
         "publishedDate": "published_date",

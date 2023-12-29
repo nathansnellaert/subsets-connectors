@@ -21,7 +21,9 @@ def fmp_market_cap(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
     return df
 
 def handle_request(ticker):
-    df = make_v3_request(f'historical-market-capitalization/{ticker}', {})    
+    df = make_v3_request(f'historical-market-capitalization/{ticker}', {}) 
+    if df.empty:
+        return df   
     column_name_mapping = {
         "symbol": "symbol",
         "date": "date",

@@ -24,7 +24,8 @@ def fmp_stock_grade(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
 
 def handle_request(symbol):
     df = make_v3_request(f'historical-grade/{symbol}', {})
-    
+    if df.empty:
+        return df
     column_name_mapping = {
         "symbol": "symbol",
         "date": "date",

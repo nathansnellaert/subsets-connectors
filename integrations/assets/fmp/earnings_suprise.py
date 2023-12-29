@@ -23,6 +23,8 @@ def fmp_earnings_surprises():
 
 def handle_request(year):
     df = make_v4_request('earnings-surprises-bulk', {'year': year, 'period': 'quarter'})
+    if df.empty:
+        return df
     column_name_mapping = {
 	    "date": "date",
 	    "symbol": "symbol",

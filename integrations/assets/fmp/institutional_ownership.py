@@ -57,6 +57,8 @@ def fmp_institutional_ownership(fmp_company_profiles: pd.DataFrame) -> pd.DataFr
 # Function to handle requests for each ticker symbol
 def handle_request(ticker):
     df = make_v4_request('institutional-ownership/symbol-ownership', {'symbol': ticker, 'includeCurrentQuarter': False})
+    if df.empty:
+        return df
     column_name_mapping = {
         "symbol": "symbol",
         "cik": "cik",

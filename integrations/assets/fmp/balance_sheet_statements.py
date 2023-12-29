@@ -73,6 +73,8 @@ def fmp_balance_sheet():
             "year": year,
             "period": "quarter"
         })
+        if df.empty:
+            return df
         column_name_mapping = {
             'symbol': 'symbol',
             'date': 'date',

@@ -32,7 +32,8 @@ def fmp_executive_compensation(fmp_company_profiles: pd.DataFrame) -> pd.DataFra
 
 def handle_request(ticker):
     df = make_v4_request('governance/executive_compensation', {'symbol': ticker})
-    
+    if df.empty:
+        return df
     column_name_mapping = {
         "cik": "cik",
         "symbol": "symbol",
