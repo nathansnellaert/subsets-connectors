@@ -92,5 +92,14 @@ fmp_unpartitioned_assets = load_assets_from_modules(
 fmp_unpartitioned_assets_job = define_asset_job(
     name='fmp_unpartitioned_assets',
     selection=fmp_unpartitioned_assets,
-    tags={"concurrency_group": "fmp"}
+    tags={"concurrency_group": "fmp"},
+    config={
+        "execution": {
+            "config": {
+                "multiprocess": {
+                    "max_concurrent": 1,
+                },
+            }
+        }
+    }
 )
