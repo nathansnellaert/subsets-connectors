@@ -95,9 +95,9 @@ def process_world_development_indicators(countries: pd.DataFrame):
     country_code_mapping = countries[['country_code2', 'country_code3']]
 
     return (
+        process_wdi_series(csv_contents.get('WDICSV.csv', pd.DataFrame()), country_code_mapping),
         process_wdi_series_metadata(csv_contents.get('WDISeries.csv', pd.DataFrame())),
         process_wdi_country_series_metadata(csv_contents.get('WDIcountry-series.csv', pd.DataFrame()), country_code_mapping),
-        process_wdi_series(csv_contents.get('WDICSV.csv', pd.DataFrame()), country_code_mapping),
         process_wdi_observation_metadata(csv_contents.get('WDIfootnote.csv', pd.DataFrame()), country_code_mapping),
         process_wdi_year_series_metadata(csv_contents.get('WDIseries-time.csv', pd.DataFrame())),
     )
