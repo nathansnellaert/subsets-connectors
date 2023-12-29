@@ -1,8 +1,6 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
-import os
-import requests
-import json
+from .utils import make_v4_request
 
 @asset(
     metadata={
@@ -28,15 +26,11 @@ import json
 def fmp_esg_scores(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
     symbols = fmp_company_profiles['symbol'].tolist()
     esg_scores_df = pd.concat([handle_request(ticker) for ticker in symbols])
-    return esg_scores_df.dropna(how='all')
+    return esg_scores_df
 
 def handle_request(ticker):
-    BASE_URL = 'https://financialmodelingprep.com/api/v4/'
-    url = BASE_URL + f'esg-environmental-social-governance-data?symbol={ticker}&apikey=' + os.environ['FMP_API_KEY']
-    response = requests.get(url)
-    data = json.loads(response.text)
-    df = pd.DataFrame(data)
-    
+    df = make_v4_request('esg-environmental-social-governance-data', {'symbol': ticker})
+
     column_name_mapping = {
         "symbol": "symbol",
         "cik": "cik",
@@ -50,10 +44,7 @@ def handle_request(ticker):
         "ESGScore": "esg_score",
         "url": "url"
     }
-
-    if df.empty:
-        return df
-    
+        
     df = df.rename(columns=column_name_mapping)
     df['date'] = pd.to_datetime(df['date']).dt.date
     df['accepted_date'] = pd.to_datetime(df['accepted_date'])

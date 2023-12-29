@@ -1,6 +1,6 @@
 from dagster import asset
 import pandas as pd
-import requests
+from .utils import make_v3_request
 
 @asset(
     metadata={
@@ -19,24 +19,21 @@ import requests
     }
 )
 def fmp_analyst_recommendation(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
-    analyst_recommendations_df = pd.DataFrame()
+    dfs = []
     for symbol in fmp_company_profiles['symbol'].tolist():
-        url = f'https://financialmodelingprep.com/api/v3/analyst-stock-recommendations/{symbol}'
-        response = requests.get(url)
-        data = response.json()
-        if data:
-            temp_df = pd.DataFrame(data)
-            analyst_recommendations_df = pd.concat([analyst_recommendations_df, temp_df])
-    
-    analyst_recommendations_df = analyst_recommendations_df.rename(columns={
+        df = make_v3_request('analyst_recommendation', {'symbol': symbol})
+        if not df.empty:
+            dfs.append(df)
+    df = pd.concat(dfs)
+    df = df.rename(columns={
         "analystRatingsbuy": "analyst_ratings_buy",
         "analystRatingsHold": "analyst_ratings_hold",
         "analystRatingsSell": "analyst_ratings_sell",
         "analystRatingsStrongSell": "analyst_ratings_strong_sell",
         "analystRatingsStrongBuy": "analyst_ratings_strong_buy"
     })
-    analyst_recommendations_df['date'] = pd.to_datetime(analyst_recommendations_df['date']).dt.date
-    return analyst_recommendations_df.dropna(how='all')
+    df['date'] = pd.to_datetime(df['date']).dt.date
+    return df
 
 @asset(
     metadata={
@@ -70,36 +67,36 @@ def fmp_analyst_recommendation(fmp_company_profiles: pd.DataFrame) -> pd.DataFra
     }
 )
 def fmp_analyst_estimates(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
-    analyst_estimates_df = pd.DataFrame()
+    dfs = []
     for symbol in fmp_company_profiles['symbol'].tolist():
-        url = f'https://financialmodelingprep.com/api/v3/analyst-estimates/{symbol}'
-        response = requests.get(url)
-        data = response.json()
-        if data:
-            temp_df = pd.DataFrame(data)
-            temp_df = temp_df.rename(columns={
-                "estimatedRevenueLow": "estimated_revenue_low",
-                "estimatedRevenueHigh": "estimated_revenue_high",
-                "estimatedRevenueAvg": "estimated_revenue_avg",
-                "estimatedEbitdaLow": "estimated_ebitda_low",
-                "estimatedEbitdaHigh": "estimated_ebitda_high",
-                "estimatedEbitdaAvg": "estimated_ebitda_avg",
-                "estimatedEbitLow": "estimated_ebit_low",
-                "estimatedEbitHigh": "estimated_ebit_high",
-                "estimatedEbitAvg": "estimated_ebit_avg",
-                "estimatedNetIncomeLow": "estimated_net_income_low",
-                "estimatedNetIncomeHigh": "estimated_net_income_high",
-                "estimatedNetIncomeAvg": "estimated_net_income_avg",
-                "estimatedSgaExpenseLow": "estimated_sga_expense_low",
-                "estimatedSgaExpenseHigh": "estimated_sga_expense_high",
-                "estimatedSgaExpenseAvg": "estimated_sga_expense_avg",
-                "estimatedEpsAvg": "estimated_eps_avg",
-                "estimatedEpsHigh": "estimated_eps_high",
-                "estimatedEpsLow": "estimated_eps_low",
-                "numberAnalystEstimatedRevenue": "number_analysts_estimated_revenue",
-                "numberAnalystsEstimatedEps": "number_analysts_estimated_eps"
-            })
-            analyst_estimates_df = pd.concat([analyst_estimates_df, temp_df])
-    
-    analyst_estimates_df['date'] = pd.to_datetime(analyst_estimates_df['date']).dt.date
-    return analyst_estimates_df.dropna(how='all')
+        df = make_v3_request('analyst_estimates', {'symbol': symbol})
+        if not df.empty:
+            dfs.append(df)
+
+    df = pd.concat(dfs)
+            
+    df = df.rename(columns={
+        "estimatedRevenueLow": "estimated_revenue_low",
+        "estimatedRevenueHigh": "estimated_revenue_high",
+        "estimatedRevenueAvg": "estimated_revenue_avg",
+        "estimatedEbitdaLow": "estimated_ebitda_low",
+        "estimatedEbitdaHigh": "estimated_ebitda_high",
+        "estimatedEbitdaAvg": "estimated_ebitda_avg",
+        "estimatedEbitLow": "estimated_ebit_low",
+        "estimatedEbitHigh": "estimated_ebit_high",
+        "estimatedEbitAvg": "estimated_ebit_avg",
+        "estimatedNetIncomeLow": "estimated_net_income_low",
+        "estimatedNetIncomeHigh": "estimated_net_income_high",
+        "estimatedNetIncomeAvg": "estimated_net_income_avg",
+        "estimatedSgaExpenseLow": "estimated_sga_expense_low",
+        "estimatedSgaExpenseHigh": "estimated_sga_expense_high",
+        "estimatedSgaExpenseAvg": "estimated_sga_expense_avg",
+        "estimatedEpsAvg": "estimated_eps_avg",
+        "estimatedEpsHigh": "estimated_eps_high",
+        "estimatedEpsLow": "estimated_eps_low",
+        "numberAnalystEstimatedRevenue": "number_analysts_estimated_revenue",
+        "numberAnalystsEstimatedEps": "number_analysts_estimated_eps"
+    })
+
+    df['date'] = pd.to_datetime(df['date']).dt.date
+    return df

@@ -1,6 +1,6 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
-import os
+from .utils import make_v4_request
 
 @asset(
     metadata={
@@ -17,16 +17,12 @@ import os
     freshness_policy=FreshnessPolicy(maximum_lag_minutes=60 * 24 * 30, cron_schedule="0 0 1 * *")  # Adjust the freshness policy as needed
 )
 def fmp_earnings_surprises():
-    dfs = [handle_request(year) for year in range(1985, 2023)]
+    dfs = [handle_request(year) for year in range(1985, 2024)]
     df = pd.concat(dfs)
-    df = df.dropna(how='all')
     return df
 
 def handle_request(year):
-    BASE_URL = 'https://financialmodelingprep.com/api/v4/'
-    url = BASE_URL + f'earnings-surprises-bulk?year={year}&period=quarter&datatype=csv&apikey=' + os.environ['FMP_API_KEY']
-    df = pd.read_csv(url)
-    
+    df = make_v4_request('earnings-surprises-bulk', {'year': year, 'period': 'quarter'})
     column_name_mapping = {
 	    "date": "date",
 	    "symbol": "symbol",

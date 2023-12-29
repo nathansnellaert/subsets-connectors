@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import requests
 import json
+from .utils import make_v4_request, make_v3_request
 
 @asset(
     metadata={
@@ -51,15 +52,7 @@ import json
     freshness_policy=FreshnessPolicy(maximum_lag_minutes=60 * 24 * 30, cron_schedule="0 0 1 * *")  # Adjust the freshness policy as needed
 )
 def fmp_company_profiles():
-    df = handle_request()
-    df = df.dropna(how='all')
-    return df
-
-def handle_request():
-    BASE_URL = 'https://financialmodelingprep.com/api/v4/'
-    url = BASE_URL + 'profile/all?datatype=csv&apikey=' + os.environ['FMP_API_KEY']
-    df = pd.read_csv(url)
-
+    df = make_v4_request('profile/all', {})
     column_name_mapping = {
         "Symbol": "symbol",
         "Price": "price",
@@ -102,68 +95,34 @@ def handle_request():
     df = df.rename(columns=column_name_mapping)
     return df
 
-
 @asset
 def fmp_commodity_symbols() -> pd.DataFrame:
-    url = "https://financialmodelingprep.com/api/v3/symbol/available-commodities?apikey=" + os.environ['FMP_API_KEY']
-    response = requests.get(url).json()
-    return pd.DataFrame(response)
+    return make_v3_request('available-commodities', {})
 
 @asset
 def fmp_crypto_symbols() -> pd.DataFrame:
-    url = "https://financialmodelingprep.com/api/v3/symbol/available-cryptocurrencies?apikey=" + os.environ['FMP_API_KEY']
-    response = requests.get(url).json()
-    return pd.DataFrame(response)
+    return make_v3_request('available-cryptocurrencies', {})
 
 @asset
-def fmp_forex_symbols(countries) -> pd.DataFrame:
-    url = "https://financialmodelingprep.com/api/v3/symbol/available-forex-currency-pairs?datatype=csv&apikey=" + os.environ['FMP_API_KEY']
-    df = pd.read_csv(url)
-
-    mapping = countries[['iso4217_currency_alphabetic_code', 'iso4217_currency_name']]
-    mapping = mapping.set_index('iso4217_currency_alphabetic_code').to_dict()['iso4217_currency_name']
-
-    df[['base', 'quote']] = df['name'].str.split('/', expand=True)
-    df['base_name'] = df['base'].map(mapping)
-    df['quote_name'] = df['quote'].map(mapping)
-
-    df = df.drop(['stockExchange', 'exchangeShortName'], axis=1)
-    return df
+def fmp_forex_symbols() -> pd.DataFrame:
+    return make_v3_request('available-forex-currency-pairs', {})
 
 @asset
 def fmp_indices_symbols() -> list:
-    url = "https://financialmodelingprep.com/api/v3/quotes/index?apikey=" + os.environ['FMP_API_KEY']
-    response = requests.get(url)
-    data = json.loads(response.text)
-    symbols_data = [(entry['symbol'], entry['name']) for entry in data]
-    return symbols_data
+    return make_v3_request('available-indexes', {})
 
 @asset
 def fmp_etf_symbols():
-    url = "https://financialmodelingprep.com/api/v3/etf/list?apikey=" + os.environ['FMP_API_KEY']
-    response = requests.get(url)
-    data = json.loads(response.text)
-    symbols_and_names = [(entry['symbol'], entry['name']) for entry in data]
-    return symbols_and_names
+    return make_v3_request('etf/list', {})
 
 @asset
 def fmp_stock_symbols():
-    url = "https://financialmodelingprep.com/api/v3/stock/list?apikey=" + os.environ['FMP_API_KEY']
-    response = requests.get(url)
-    data = json.loads(response.text)
-    symbols_and_names = [(entry['symbol'], entry['name']) for entry in data]
-    return symbols_and_names
+    return make_v3_request('stock/list', {})
 
-
+@asset
 def delisted_company_symbols():
-    url = "https://financialmodelingprep.com/api/v3/delisted-companies?apikey=" + os.environ['FMP_API_KEY']
-    response = requests.get(url)
-    data = json.loads(response.text)
-    symbols = [entry['symbol'] for entry in data]
-    return symbols
+    return make_v3_request('delisted-companies', {})
 
-
-# Asset for FMP CIK List data
 @asset(
     metadata={
         "source": "Financial Modeling Prep",
@@ -176,11 +135,7 @@ def delisted_company_symbols():
     }
 )
 def cik_list() -> pd.DataFrame:
-    url = 'https://financialmodelingprep.com/api/v3/cik_list'
-    response = requests.get(url)
-    data = response.json()
-    df = pd.DataFrame(data)
-    return df
+    return make_v3_request('cik_list', {})
 
 
 @asset(
@@ -197,9 +152,6 @@ def cik_list() -> pd.DataFrame:
     }
 )
 def fmp_symbol_changes() -> pd.DataFrame:
-    url = 'https://financialmodelingprep.com/api/v4/symbol_change'
-    response = requests.get(url)
-    data = response.json()
-    df = pd.DataFrame(data)
-    df['date'] = pd.to_datetime(df['date']).dt.date  # Converting date to datetime format
+    df = make_v4_request('symbol_change', {})
+    df['date'] = pd.to_datetime(df['date']).dt.date 
     return df

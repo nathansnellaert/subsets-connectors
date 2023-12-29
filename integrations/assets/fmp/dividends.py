@@ -25,7 +25,7 @@ import requests
 def fmp_dividends(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
     symbols = fmp_company_profiles['symbol'].tolist()
     df = pd.concat([handle_request(ticker) for ticker in symbols])
-    return df.dropna(how='all')
+    return df
 
 def handle_request(ticker):
     BASE_URL = 'https://financialmodelingprep.com/api/v3/'

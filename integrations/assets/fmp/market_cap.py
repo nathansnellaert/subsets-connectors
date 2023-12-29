@@ -1,8 +1,6 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
-import os
-import requests
-import json
+from .utils import make_v3_request
 
 @asset(
     metadata={
@@ -20,26 +18,15 @@ import json
 def fmp_market_cap(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
     symbols = fmp_company_profiles['symbol'].tolist()
     df = pd.concat([handle_request(ticker) for ticker in symbols])
-    return df.dropna(how='all')
+    return df
 
 def handle_request(ticker):
-    BASE_URL = 'https://financialmodelingprep.com/api/v3/'
-    url = BASE_URL + f'historical-market-capitalization/{ticker}?apikey=' + os.environ['FMP_API_KEY']
-    response = requests.get(url)
-    
-    data = json.loads(response.text)
-    df = pd.DataFrame(data)
-    
-    if df.empty:
-        return pd.DataFrame()
-    
+    df = make_v3_request(f'historical-market-capitalization/{ticker}', {})    
     column_name_mapping = {
         "symbol": "symbol",
         "date": "date",
         "marketCap": "market_cap"
     }
-    
     df = df.rename(columns=column_name_mapping)
     df['date'] = pd.to_datetime(df['date']).dt.date
-    
     return df

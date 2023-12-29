@@ -1,8 +1,6 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
-import os
-import requests
-import json
+from .utils import make_v4_request
 
 def convert_mixed_format(date_str):
     try:
@@ -41,23 +39,18 @@ def convert_mixed_format(date_str):
 def fmp_insider_trading(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
     symbols = fmp_company_profiles['symbol'].tolist()
     insider_trading_df = pd.concat([handle_request(ticker) for ticker in symbols])
-    return insider_trading_df.dropna(how='all')
+    return insider_trading_df
 
 # Function to handle requests for each ticker symbol
 def handle_request(ticker):
     dfs = []
     page = 0
-    BASE_URL = 'https://financialmodelingprep.com/api/v4/'
     
     while True:
-        url = BASE_URL + f'insider-trading?symbol={ticker}&page={page}&apikey=' + os.environ['FMP_API_KEY']
-        response = requests.get(url)
-        data = json.loads(response.text)
-        
-        if len(data) == 0:
+        df = make_v4_request('insider-trading', {'symbol': ticker, 'page': page})
+
+        if df.empty:
             break
-            
-        df = pd.DataFrame(data)
         
         column_name_mapping = {
             "symbol": "symbol",
