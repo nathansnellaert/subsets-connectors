@@ -19,10 +19,27 @@ def get_child_categories(category_id, api_key):
     return make_request(url)['categories']
 
 def get_series_metadata_for_category(api_key, category_id):
-    url = f"https://api.stlouisfed.org/fred/category/series?category_id={category_id}&api_key={api_key}&file_type=json"
-    df = pd.DataFrame(make_request(url)['seriess'])
+    limit = 1000
+    offset = 0
+    all_data = []
+
+    while True:
+        url = f"https://api.stlouisfed.org/fred/category/series?category_id={category_id}&api_key={api_key}&file_type=json&limit={limit}&offset={offset}"
+        data = make_request(url).get('seriess', [])
+
+        if not data: 
+            break
+        
+        all_data.extend(data)
+        offset += limit
+
+        if len(data) < limit:
+            break
+
+    df = pd.DataFrame(all_data)
     df['category_id'] = category_id
     return df
+
 
 def get_series_observations(series_id, api_key):
     url = f"https://api.stlouisfed.org/fred/series/observations?series_id={series_id}&api_key={api_key}&file_type=json"
