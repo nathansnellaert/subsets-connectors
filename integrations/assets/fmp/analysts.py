@@ -21,7 +21,7 @@ from .utils import make_v3_request
 def fmp_analyst_recommendation(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
     dfs = []
     for symbol in fmp_company_profiles['symbol'].tolist():
-        df = make_v3_request('analyst_recommendation', {'symbol': symbol})
+        df = make_v3_request('analyst-stock-recommendations/' + symbol)
         if not df.empty:
             dfs.append(df)
     df = pd.concat(dfs)
@@ -69,7 +69,7 @@ def fmp_analyst_recommendation(fmp_company_profiles: pd.DataFrame) -> pd.DataFra
 def fmp_analyst_estimates(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
     dfs = []
     for symbol in fmp_company_profiles['symbol'].tolist():
-        df = make_v3_request('analyst_estimates', {'symbol': symbol})
+        df = make_v3_request(f'analyst-estimates/{symbol}')
         if not df.empty:
             dfs.append(df)
 
