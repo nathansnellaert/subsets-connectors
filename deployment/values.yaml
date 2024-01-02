@@ -895,6 +895,9 @@ dagsterDaemon:
         - key: "concurrency_group"
           value: fmp
           limit: 4
+        - key: "concurrency_group"
+          value: hackernews
+          limit: 1
         dequeueIntervalSeconds: ~
         # Whether to dequeue runs using an asynchronous thread pool, allowing multiple runs
         # to be dequeued in parallel.
