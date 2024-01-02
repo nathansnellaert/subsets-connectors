@@ -6,6 +6,9 @@ run_queue:
   - key: "concurrency_group"
     value: fmp
     limit: 4
+  - key: "concurrency_group"
+    value: hackernews
+    limit: 1
   max_concurrent_runs: 20
 telemetry:
   enabled: false
