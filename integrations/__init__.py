@@ -17,6 +17,7 @@ from integrations.jobs.regular import job as regular_job, assets as regular_asse
 from integrations.jobs.wikipedia import job as wikipedia_job, assets as wikipedia_assets
 from integrations.jobs.internal import job as internal_job, assets as internal_assets
 from integrations.jobs.unctad import job as unctad_job, assets as unctad_assets
+from integrations.jobs.hackernews import job as hackernews_job, assets as hackernews_assets
 
 ENV = os.environ.get("ENV", "dev")
 
@@ -31,6 +32,7 @@ assets = [
     *wikipedia_assets,
     *internal_assets,
     *unctad_assets,
+    *hackernews_assets,
 ]
 
 jobs = [
@@ -41,6 +43,7 @@ jobs = [
     wikipedia_job,
     internal_job,
     unctad_job,
+    hackernews_job,
 ]
 defs = Definitions(
     assets=assets,
