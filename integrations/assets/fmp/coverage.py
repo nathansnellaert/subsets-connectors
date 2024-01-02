@@ -116,10 +116,19 @@ def fmp_crypto_symbols() -> pd.DataFrame:
     return pd.DataFrame(response)
 
 @asset
-def fmp_forex_symbols() -> pd.DataFrame:
-    url = "https://financialmodelingprep.com/api/v3/symbol/available-forex-currency-pairs?apikey=" + os.environ['FMP_API_KEY']
-    response = requests.get(url).json()
-    return pd.DataFrame(response)
+def fmp_forex_symbols(countries) -> pd.DataFrame:
+    url = "https://financialmodelingprep.com/api/v3/symbol/available-forex-currency-pairs?datatype=csv&apikey=" + os.environ['FMP_API_KEY']
+    df = pd.read_csv(url)
+
+    mapping = countries[['iso4217_currency_alphabetic_code', 'iso4217_currency_name']]
+    mapping = mapping.set_index('iso4217_currency_alphabetic_code').to_dict()['iso4217_currency_name']
+
+    df[['base', 'quote']] = df['name'].str.split('/', expand=True)
+    df['base_name'] = df['base'].map(mapping)
+    df['quote_name'] = df['quote'].map(mapping)
+
+    df = df.drop(['stockExchange', 'exchangeShortName'], axis=1)
+    return df
 
 @asset
 def fmp_indices_symbols() -> list:
