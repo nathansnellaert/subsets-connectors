@@ -168,12 +168,13 @@ dagsterWebserver:
 
   # If you want to specify resources, uncomment the following lines, adjust them as necessary,
   # and remove the curly braces after 'resources:'.
-  limits:
-    cpu: 1000m
-    memory: 2Gi
-  requests:
-    cpu: 1000m
-    memory: 2Gi
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
   # Readiness probe detects when the pod is ready to serve requests.
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes
   readinessProbe:
