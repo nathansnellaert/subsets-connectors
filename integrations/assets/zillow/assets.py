@@ -34,7 +34,7 @@ def zillow_home_value_index():
     "description": "Monthly Zillow Observed Rent Index data for metro areas.",
 }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))
 def zillow_observed_rent_index():
-    url = "https://files.zillowstatic.com/research/public_csvs/zori/Metro_zori_sm_month.csv"
+    url = "https://files.zillowstatic.com/research/public_csvs/zori/Metro_zori_uc_sfrcondomfr_sm_month.csv"
     df = pd.read_csv(url)
     return process_zillow_csv(df)
 

@@ -34,6 +34,10 @@ from .country_code_2_to_simple_name import mapping
             "description": "ISO 3166-1 numeric country code"
         },
         {
+            "name": "country_name",
+            "description": "Simple country name"
+        },
+        {
             "name": "gaul_code",
             "description": "Global Administrative Unit Layers (GAUL) code"
         },
@@ -297,7 +301,7 @@ def countries(context):
         "EDGAR": "edgar_code"
     }
     df = df.rename(columns=column_name_mapping)
-    df['country_name_simple'] = df['country_code2'].apply(lambda x: mapping.get(x, x))
+    df['country_name'] = df['country_code2'].apply(lambda x: mapping.get(x, x))
     context.log.info(f"Loaded {len(df)} countries")
     return df
 
@@ -309,7 +313,7 @@ def countries(context):
         "name": "region_name",
         "description": "Name of the geographic region"
     }, {
-        "name": "subregion_name",
+        "name": "sub_region_name",
         "description": "Name of the geographic sub-region"
     }, {
         "name": "intermediate_region_name",
@@ -317,7 +321,7 @@ def countries(context):
     }]
 }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 1 * *", maximum_lag_minutes=60 * 24))
 def regions(countries):
-    return countries[['region_name', 'subregion_name', 'intermediate_region_name']].drop_duplicates()
+    return countries[['region_name', 'sub_region_name', 'intermediate_region_name']].drop_duplicates()
 
 @asset(metadata={
     "source": "opendatasoft",
@@ -422,7 +426,7 @@ def organisation():
         "name": "lon",
         "description": "Longitude coordinate of the US state"
     }]
-}, io_manager_key="vanilla_parquet_io_manager")
+})
 def us_states():
     url = "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/georef-united-states-of-america-state/exports/csv?"
     states = pd.read_csv(url, sep=';')
