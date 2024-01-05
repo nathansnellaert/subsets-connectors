@@ -34,6 +34,10 @@ from .country_code_2_to_simple_name import mapping
             "description": "ISO 3166-1 numeric country code"
         },
         {
+            "name": "country_name",
+            "description": "Simple country name"
+        },
+        {
             "name": "gaul_code",
             "description": "Global Administrative Unit Layers (GAUL) code"
         },
@@ -297,7 +301,7 @@ def countries(context):
         "EDGAR": "edgar_code"
     }
     df = df.rename(columns=column_name_mapping)
-    df['country_name_simple'] = df['country_code2'].apply(lambda x: mapping.get(x, x))
+    df['country_name'] = df['country_code2'].apply(lambda x: mapping.get(x, x))
     context.log.info(f"Loaded {len(df)} countries")
     return df
 
