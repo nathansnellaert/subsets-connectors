@@ -147,6 +147,10 @@ def process_wdi_year_series_metadata(df):
     return df[['indicator_code', 'year', 'description']]
 
 def process_wdi_series(df, country_code_mapping):
+
+    # The latest csv export from the World Bank has an empty column at the end. Remove it.
+    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+
     df = df.melt(
         id_vars=['Country Name', 'Country Code', 'Indicator Name', 'Indicator Code'],
         var_name='year',
