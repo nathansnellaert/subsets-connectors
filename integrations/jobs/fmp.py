@@ -54,12 +54,12 @@ fmp_eod_job = define_asset_job(
             "container_config": {
                 "resources": {
                     "requests": {
-                        "cpu": "50m",
-                        "memory": "128Mi"
+                        "cpu": "150m",
+                        "memory": "512Mi"
                     },
                     "limits": {
-                        "cpu": "50m",
-                        "memory": "128Mi"
+                        "cpu": "150m",
+                        "memory": "512Mi"
                     }
                 }
             }
