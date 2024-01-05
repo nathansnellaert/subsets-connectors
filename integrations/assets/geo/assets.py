@@ -313,7 +313,7 @@ def countries(context):
         "name": "region_name",
         "description": "Name of the geographic region"
     }, {
-        "name": "subregion_name",
+        "name": "sub_region_name",
         "description": "Name of the geographic sub-region"
     }, {
         "name": "intermediate_region_name",
@@ -321,7 +321,7 @@ def countries(context):
     }]
 }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 1 * *", maximum_lag_minutes=60 * 24))
 def regions(countries):
-    return countries[['region_name', 'subregion_name', 'intermediate_region_name']].drop_duplicates()
+    return countries[['region_name', 'sub_region_name', 'intermediate_region_name']].drop_duplicates()
 
 @asset(metadata={
     "source": "opendatasoft",
