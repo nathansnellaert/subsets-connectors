@@ -6,3 +6,4 @@ subsets_integrations.egg-info/**
 history
 storage
 logs
+schedules
