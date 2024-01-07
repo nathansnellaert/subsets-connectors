@@ -1,8 +1,6 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
-import os
-import requests
-import json
+from .utils import make_v4_request
 
 @asset(
     metadata={
@@ -28,18 +26,12 @@ import json
 def fmp_upgrades_downgrades(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
     symbols = fmp_company_profiles['symbol'].tolist()
     upgrades_downgrades_df = pd.concat([handle_request(ticker) for ticker in symbols])
-    return upgrades_downgrades_df.dropna(how='all')
+    return upgrades_downgrades_df
 
 def handle_request(ticker):
-    BASE_URL = 'https://financialmodelingprep.com/api/v4/'
-    url = BASE_URL + f'upgrades-downgrades?symbol={ticker}&apikey=' + os.environ['FMP_API_KEY']
-    response = requests.get(url)
-    data = json.loads(response.text)
-    df = pd.DataFrame(data)
-    
+    df = make_v4_request('upgrades-downgrades', {'symbol': ticker})
     if df.empty:
         return df
-    
     column_name_mapping = {
         "symbol": "symbol",
         "publishedDate": "published_date",
@@ -56,7 +48,6 @@ def handle_request(ticker):
     
     df = df.rename(columns=column_name_mapping)
 
-    # remove \n from published_date (bug fix)
     df['published_date'] = df['published_date'].str.replace('\n', '')
     df['published_date'] = pd.to_datetime(df['published_date']).dt.date
     return df

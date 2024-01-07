@@ -1,6 +1,6 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
-import os
+from integrations.assets.fmp.utils import make_v4_request
 
 @asset(
     metadata={
@@ -64,12 +64,17 @@ import os
     },
     freshness_policy=FreshnessPolicy(maximum_lag_minutes=60 * 24 * 30, cron_schedule="0 0 1 * *")
 )
+
+
+
 def fmp_balance_sheet():
     def handle_request(year):
-        BASE_URL = 'https://financialmodelingprep.com/api/v4/'
-        api_key = os.environ['FMP_API_KEY']
-        url = f"{BASE_URL}balance-sheet-statement-bulk?year={year}&period=quarter&datatype=csv&apikey={api_key}"
-        df = pd.read_csv(url)
+        df = make_v4_request('balance-sheet-statement-bulk', {
+            "year": year,
+            "period": "quarter"
+        })
+        if df.empty:
+            return df
         column_name_mapping = {
             'symbol': 'symbol',
             'date': 'date',
@@ -128,7 +133,6 @@ def fmp_balance_sheet():
         df['date'] = pd.to_datetime(df['date']).dt.date
         return df
 
-    dfs = [handle_request(year) for year in range(1985, 2023)]
+    dfs = [handle_request(year) for year in range(1985, 2024)]
     df = pd.concat(dfs)
-    df = df.dropna(how='all')
     return df

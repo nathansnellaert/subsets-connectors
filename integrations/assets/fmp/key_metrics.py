@@ -1,12 +1,11 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
-import os
+from .utils import make_v4_request
 
 def handle_request(year):
-    BASE_URL = 'https://financialmodelingprep.com/api/v4/'
-    url = BASE_URL + f'key-metrics-bulk?year={year}&+&period=quarter&datatype=csv&apikey=' + os.environ['FMP_API_KEY']
-    df = pd.read_csv(url)
-    
+    df = make_v4_request('key-metrics-bulk', {'year': year, 'period': 'quarter'})
+    if df.empty:
+        return df
     column_name_mapping = 	{
 	    "symbol": "symbol",
 	    "date": "date",
@@ -146,5 +145,4 @@ def handle_request(year):
 def fmp_key_metrics():
     dfs = [handle_request(year) for year in range(1985, 2023)]
     df = pd.concat(dfs)
-    df = df.dropna(how='all')
     return df

@@ -1,6 +1,6 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
-import os
+from .utils import make_v4_request
 
 @asset(
     metadata={
@@ -58,10 +58,12 @@ import os
 )
 def fmp_income_statement():
     def handle_request(year):
-        BASE_URL = 'https://financialmodelingprep.com/api/v4/'
-        api_key = os.environ['FMP_API_KEY']
-        url = f"{BASE_URL}income-statement-bulk?year={year}&period=quarter&datatype=csv&apikey={api_key}"
-        df = pd.read_csv(url)
+        df = make_v4_request('income-statement-bulk', {
+            "year": year,
+            "period": "quarter",
+        })
+        if df.empty:
+            return df
         column_name_mapping = {
             "date": "date",
             "symbol": "symbol",
@@ -106,7 +108,6 @@ def fmp_income_statement():
         df['date'] = pd.to_datetime(df['date']).dt.date
         return df
 
-    dfs = [handle_request(year) for year in range(1985, 2023)]
+    dfs = [handle_request(year) for year in range(1985, 2024)]
     df = pd.concat(dfs)
-    df = df.dropna(how='all')
     return df

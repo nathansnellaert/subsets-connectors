@@ -1,8 +1,6 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
-import os
-import requests
-import json
+from .utils import make_v4_request
 
 # Asset for FMP Institutional Ownership data
 @asset(
@@ -54,20 +52,13 @@ import json
 def fmp_institutional_ownership(fmp_company_profiles: pd.DataFrame) -> pd.DataFrame:
     symbols = fmp_company_profiles['symbol'].tolist()
     institutional_ownership_df = pd.concat([handle_request(ticker) for ticker in symbols])
-    return institutional_ownership_df.dropna(how='all')
+    return institutional_ownership_df
 
 # Function to handle requests for each ticker symbol
 def handle_request(ticker):
-    BASE_URL = 'https://financialmodelingprep.com/api/v4/institutional-ownership/symbol-ownership?'
-    url = BASE_URL + f'symbol={ticker}&includeCurrentQuarter=false&apikey=' + os.environ['FMP_API_KEY']
-    resp = requests.get(url)
-    data = resp.json()
-    
-    df = pd.DataFrame(data)
-
+    df = make_v4_request('institutional-ownership/symbol-ownership', {'symbol': ticker, 'includeCurrentQuarter': False})
     if df.empty:
         return df
-
     column_name_mapping = {
         "symbol": "symbol",
         "cik": "cik",

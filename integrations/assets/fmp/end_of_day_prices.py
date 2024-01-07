@@ -1,29 +1,13 @@
 import os
 import pandas as pd
-from dagster import asset, Partition, StaticPartitionsDefinition, DailyPartitionsDefinition
-from ratelimit import limits, sleep_and_retry
-from tenacity import retry, stop_after_attempt, wait_exponential
-import requests
+from dagster import asset, DailyPartitionsDefinition
 from datetime import datetime
-import json
-
+from .utils import make_v4_request
 current_dt = datetime.now()
-
-yearly_partitions = [str(year) for year in range(1985, current_dt.year + 1)]
-
-@sleep_and_retry
-@limits(calls=750, period=60)
-@retry(wait=wait_exponential(multiplier=2), stop=stop_after_attempt(5), reraise=True)
-def make_request(path) -> pd.DataFrame:
-    BASE_URL = 'https://financialmodelingprep.com/api/v4/'
-    url = BASE_URL + path
-    df = pd.read_csv(url)
-    return df
 
 @asset(partitions_def=DailyPartitionsDefinition(start_date="2014-01-01"))
 def fmp_eod_prices(context) -> pd.DataFrame:
-    path = f'batch-request-end-of-day-prices?date={context.partition_key}&apikey=' + os.environ['FMP_API_KEY']
-    df =  make_request(path)
+    df = make_v4_request('batch-request-end-of-day-prices', {'date': context.partition_key})
     df['volume'] = df['volume'].astype(int)
     return df
 
