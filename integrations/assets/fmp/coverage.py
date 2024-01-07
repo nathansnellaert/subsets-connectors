@@ -108,7 +108,7 @@ def fmp_forex_symbols() -> pd.DataFrame:
     return make_v3_request('symbol/available-forex-currency-pairs', {})
 
 @asset
-def fmp_indices_symbols() -> list:
+def fmp_indices_symbols() -> pd.DataFrame:
     return make_v3_request('symbol/available-indexes', {})
 
 @asset
