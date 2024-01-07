@@ -3,17 +3,20 @@ from typing import Union
 import pandas as pd
 
 from dagster import (
-    ConfigurableIOManager,
+    IOManager,
     InputContext,
     OutputContext,
     ResourceDependency,
     _check as check,
 )
 
-class LocalPandasIOManager(ConfigurableIOManager):
+class LocalPandasIOManager(IOManager):
     @property
     def _base_path(self):
-        return os.environ['DAGSTER_DATA_DIR']  
+        return self.path
+    
+    def __init__(self, path: str):
+        self.path = path
 
     def handle_output(self, context: OutputContext, obj: pd.DataFrame):
         path = self._get_path(context)

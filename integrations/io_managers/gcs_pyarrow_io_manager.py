@@ -4,9 +4,9 @@ from dagster import IOManager, InputContext, OutputContext
 from io import BytesIO
 
 class GCSPyArrowIOManager(IOManager):
-    def __init__(self, gcs_bucket_name: str):
+    def __init__(self, project_id, gcs_bucket_name: str):
         self.gcs_bucket_name = gcs_bucket_name
-        self.gcs_client = storage.Client()
+        self.gcs_client = storage.Client(project=project_id)
 
     def handle_output(self, context: OutputContext, obj: pa.Table):
         gcs_path = self._get_gcs_path(context)

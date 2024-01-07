@@ -7,7 +7,10 @@ class LocalPyArrowIOManager(IOManager):
 
     @property
     def _base_path(self):
-        return os.environ['DAGSTER_DATA_DIR']
+        return self.path
+    
+    def __init__(self, path: str):
+        self.path = path
 
     def _get_path(self, context: OutputContext):
         key = context.asset_key.path[-1]
