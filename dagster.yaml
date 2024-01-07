@@ -12,7 +12,3 @@ run_queue:
   max_concurrent_runs: 20
 telemetry:
   enabled: false
-storage:
-  postgres:
-    postgres_url:
-      env: POSTGRES_URL
