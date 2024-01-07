@@ -15,14 +15,9 @@ limits = "^3.6.0"
 py7zr = "^0.20.6"
 ratelimit = "^2.2.1"
 ipykernel = "^6.25.2"
-lxml = "^4.9.3"
 requests = "2.31.0"
-urllib3 = "1.26.15"
-html5lib = "^1.1"
-beautifulsoup4 = "^4.12.2"
 pyarrow = "^14.0.1"
 google-cloud-storage = "^2.13.0"
-dagster-postgres = "^0.21.12"
 
 [build-system]
 requires = ["poetry-core"]
