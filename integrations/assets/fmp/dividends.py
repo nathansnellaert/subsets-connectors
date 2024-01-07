@@ -49,8 +49,8 @@ def handle_request(ticker):
     
     df = df.rename(columns=column_name_mapping)
     df['symbol'] = ticker
-    df['date'] = pd.to_datetime(df['date']).dt.date
-    df['record_date'] = pd.to_datetime(df['record_date']).dt.date
-    df['payment_date'] = pd.to_datetime(df['payment_date']).dt.date
-    df['declaration_date'] = pd.to_datetime(df['declaration_date']).dt.date
+    df['date'] = pd.to_datetime(df['date'], errors='coerce').dt.date
+    df['record_date'] = pd.to_datetime(df['record_date'], errors='coerce').dt.date
+    df['payment_date'] = pd.to_datetime(df['payment_date'], errors='coerce').dt.date
+    df['declaration_date'] = pd.to_datetime(df['declaration_date'], errors='coerce').dt.date
     return df
