@@ -327,16 +327,11 @@ dagster-user-deployments:
           secretKeyRef:
             name: gcp-project-id
             key: GCP_PROJECT_ID
-      - name: GBQ_DATASET
+      - name: GCS_BUCKET_NAME
         valueFrom:
           secretKeyRef:
-            name: gbq-dataset
-            key: GBQ_DATASET
-      - name: GCS_BUCKET
-        valueFrom:
-          secretKeyRef:
-            name: gcs-bucket
-            key: GCS_BUCKET
+            name: gcs-bucket-name
+            key: GCS_BUCKET_NAME
       - name: FMP_API_KEY
         valueFrom:
           secretKeyRef:
@@ -347,28 +342,10 @@ dagster-user-deployments:
           secretKeyRef:
             name: fred-api-key
             key: FRED_API_KEY
-      - name: BIGQUERY_PROJECT_ID
-        valueFrom:
-          secretKeyRef:
-            name: bigquery-project-id
-            key: BIGQUERY_PROJECT_ID
-      - name: DAGSTER_DATA_DIR
-        valueFrom:
-          secretKeyRef:
-            name: dagster-data-dir
-            key: DAGSTER_DATA_DIR
-      - name: POSTGRES_URL
-        valueFrom:
-          secretKeyRef:
-            name: postgres-url
-            key: POSTGRES_URL
-      - name: DAGSTER_CURRENT_IMAGE
-        valueFrom:
-          secretKeyRef:
-            name: dagster-current-image
-            key: DAGSTER_CURRENT_IMAGE
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: "/var/secrets/google/key.json"
+      - name: DATA_STORAGE
+        value: "gcs"
 
 
       # Additional environment variables can be retrieved and set from ConfigMaps. See:
@@ -415,27 +392,12 @@ dagster-user-deployments:
       - name: fred-api-key
         secret:
           secretName: fred-api-key
-      - name: postgres-url
-        secret:
-          secretName: postgres-url
       - name: gcp-project-id
         secret:
           secretName: gcp-project-id
-      - name: gbq-dataset
+      - name: gcs-bucket-name
         secret:
-          secretName: gbq-dataset
-      - name: gcs-bucket
-        secret:
-          secretName: gcs-bucket
-      - name: bigquery-project-id
-        secret:
-          secretName: bigquery-project-id
-      - name: dagster-data-dir
-        secret:
-          secretName: dagster-data-dir
-      - name: dagster-current-image
-        secret:
-          secretName: dagster-current-image
+          secretName: gcs-bucket-name
 
       # Additional volume mounts that should be included. See:
       # See: https://v1-18.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#volumemount-v1-core
@@ -449,20 +411,10 @@ dagster-user-deployments:
         mountPath: "/var/secrets/fmp-api-key"
       - name: fred-api-key
         mountPath: "/var/secrets/fred-api-key"
-      - name: postgres-url
-        mountPath: "/var/secrets/postgres-url"
       - name: gcp-project-id
         mountPath: "/var/secrets/gcp-project-id"
-      - name: gbq-dataset
-        mountPath: "/var/secrets/gbq-dataset"
-      - name: gcs-bucket
-        mountPath: "/var/secrets/gcs-bucket"
-      - name: bigquery-project-id
-        mountPath: "/var/secrets/bigquery-project-id"
-      - name: dagster-data-dir
-        mountPath: "/var/secrets/dagster-data-dir"
-      - name: dagster-current-image
-        mountPath: "/var/secrets/dagster-current-image"
+      - name: gcs-bucket-name
+        mountPath: "/var/secrets/gcs-bucket-name"
 
       annotations: {}
       nodeSelector: {}

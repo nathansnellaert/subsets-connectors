@@ -1,7 +1,9 @@
 import warnings
 from dagster import ExperimentalWarning, Definitions
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
+
 import os
+
 from integrations.io_managers.gcs_pandas_io_manager import GCSPandasIOManager
 from integrations.io_managers.gcs_pyarrow_io_manager import GCSPyArrowIOManager
 from integrations.io_managers.local_pandas_io_manager import LocalPandasIOManager
@@ -19,10 +21,26 @@ from integrations.jobs.internal import job as internal_job, assets as internal_a
 from integrations.jobs.unctad import job as unctad_job, assets as unctad_assets
 from integrations.jobs.hackernews import job as hackernews_job, assets as hackernews_assets
 
-ENV = os.environ.get("ENV", "dev")
+DATA_STORAGE = os.environ.get("DATA_STORAGE", "local")
 
-pandas_io_manager = LocalPandasIOManager() if ENV == 'test' else GCSPandasIOManager(os.environ['GCS_BUCKET'])
-pyarrow_io_manager = LocalPyArrowIOManager() if ENV == 'test' else GCSPyArrowIOManager(os.environ['GCS_BUCKET'])
+if DATA_STORAGE == 'local':
+    resources = {
+        "io_manager": LocalPandasIOManager(path=os.environ['DAGSTER_DATA_DIR']),
+        "vanilla_parquet_io_manager": LocalPyArrowIOManager(path=os.environ['DAGSTER_DATA_DIR'])
+    }
+elif DATA_STORAGE == 'gcs':
+    resources = {
+        "io_manager": GCSPandasIOManager(
+            os.environ['GCP_PROJECT_ID'],
+            os.environ['GCS_BUCKET_NAME']
+        ),
+        "vanilla_parquet_io_manager": GCSPyArrowIOManager(
+            os.environ['GCP_PROJECT_ID'],
+            os.environ['GCS_BUCKET_NAME']
+        )
+    }
+else:
+    raise Exception(f"Unknown data storage type: {DATA_STORAGE}")
 
 assets = [
     *fmp_eod_assets,
@@ -48,8 +66,5 @@ jobs = [
 defs = Definitions(
     assets=assets,
     jobs=jobs,
-    resources={
-        "io_manager": pandas_io_manager,
-        "vanilla_parquet_io_manager": pyarrow_io_manager 
-    },
+    resources=resources
 )
