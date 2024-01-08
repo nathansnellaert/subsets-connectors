@@ -1,10 +1,11 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from integrations.assets.fmp.utils import make_v4_request
+from .source import financialmodellingprep
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Balance Sheet Data",
         "description": "Retrieves balance sheet data for multiple years and transforms it into a structured format.",
         "columns": [

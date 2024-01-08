@@ -1,10 +1,11 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .utils import make_v4_request
+from .source import financialmodellingprep
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Executive Compensation Data",
         "description": "Retrieves detailed compensation data for executives, including salary, bonus, stock awards, and other incentives.",
         "columns": [

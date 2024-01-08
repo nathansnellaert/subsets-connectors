@@ -1,8 +1,9 @@
 from dagster import asset
 from .utils import download_dataset
+from .source import unctad
 
 @asset(metadata={
-    "source": "unctad",
+    "source": unctad,
     "name": "Total and urban population, annual (~1MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USPopTotal.",
 }, io_manager_key="vanilla_parquet_io_manager")
@@ -11,7 +12,7 @@ def total_and_urban_population_annual():
     
 
 @asset(metadata={
-    "source": "unctad",
+    "source": unctad,
     "name": "Total population growth rates, annual (~1MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USPopGR.",
 }, io_manager_key="vanilla_parquet_io_manager")
@@ -20,7 +21,7 @@ def total_population_growth_rates_annual():
     
 
 @asset(metadata={
-    "source": "unctad",
+    "source": unctad,
     "name": "Population structure by gender and age-group, annual (~20MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USPopAgeStruct.",
 }, io_manager_key="vanilla_parquet_io_manager")
@@ -29,7 +30,7 @@ def population_structure_by_gender_and_age_group_annual():
     
 
 @asset(metadata={
-    "source": "unctad",
+    "source": unctad,
     "name": "Total, child and old-age dependency ratios, annual (~1MB)",
     "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USPopDependency.",
 }, io_manager_key="vanilla_parquet_io_manager")

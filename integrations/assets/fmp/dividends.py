@@ -3,10 +3,11 @@ import pandas as pd
 import os
 import json
 import requests
+from .source import financialmodellingprep
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Stock Dividends Data",
         "description": "Retrieves historical dividend data for stocks, including adjusted dividends, record, payment, and declaration dates.",
         "columns": [

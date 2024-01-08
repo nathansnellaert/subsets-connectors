@@ -2,8 +2,15 @@ from dagster import asset, FreshnessPolicy
 import pandas as pd
 import requests
 
+tsa = {
+    "id": "tsa",
+    "name": "Transportation Security Administration",
+    "description": "The Transportation Security Administration is an agency of the U.S. Department of Homeland Security that has authority over the security of the traveling public in the United States.",
+    "url": "https://www.tsa.gov/"
+}
+
 @asset(metadata={
-    "source": "tsa",
+    "source": tsa,
     "name": "TSA checkpoint travel numbers",
     "description": "The number of travelers passing through TSA checkpoints per day.",
 }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * *", maximum_lag_minutes=60 * 24))

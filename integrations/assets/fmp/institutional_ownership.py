@@ -1,11 +1,12 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .utils import make_v4_request
+from .source import financialmodellingprep
 
 # Asset for FMP Institutional Ownership data
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Institutional Ownership Data",
         "description": "Retrieves data on institutional ownership of company stocks, providing insights into the holdings and investment changes of institutional investors.",
         "columns": [

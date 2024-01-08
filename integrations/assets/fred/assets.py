@@ -5,6 +5,13 @@ import pandas as pd
 from ratelimit import limits, sleep_and_retry
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+source = {
+    "id": "fred",
+    "name": "Federal Reserve Economic Data",
+    "description": "The Federal Reserve Economic Data (FRED) API is a web service that allows developers to write programs and build applications that retrieve economic data from the FRED database hosted by the Economic Research Division of the Federal Reserve Bank of St. Louis.",
+    "url": "https://fred.stlouisfed.org/"
+}
+
 @sleep_and_retry
 @limits(calls=100, period=60)
 @retry(wait=wait_exponential(multiplier=2), stop=stop_after_attempt(5), reraise=True)
@@ -56,7 +63,7 @@ def get_category_tree(category_id, api_key):
     return child_categories + [item for child in child_categories for item in get_category_tree(child['id'], api_key)]
 
 @asset(metadata={
-    "source": "fred",
+    "source": source,
     "name": "Federal Reserve Economic Category Taxonomy",
     "description": "A hierarchical structure of economic categories from the Federal Reserve Economic Data (FRED) API.",
     "columns": [{
@@ -77,7 +84,7 @@ def fred_category_taxonomy() -> pd.DataFrame:
 
 
 @asset(metadata={
-    "source": "fred",
+    "source": source,
     "name": "Federal Reserve Economic Series Metadata",
     "description": "Metadata for all time series from the Federal Reserve Economic Data (FRED) API.",
     "columns": [{
@@ -147,7 +154,7 @@ def fred_series_metadata(fred_category_taxonomy: pd.DataFrame) -> pd.DataFrame:
 
 
 @asset(metadata={
-    "source": "fred",
+    "source": source,
     "name": "Federal Reserve Economic Data Releases",
     "description": "A collection of recent economic data releases from the FRED API, including release id, real-time availability dates, name of the release, press release status, and related links.",
     "columns": [{

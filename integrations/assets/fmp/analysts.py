@@ -1,10 +1,11 @@
 from dagster import asset
 import pandas as pd
 from .utils import make_v3_request
+from .source import financialmodellingprep
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Analyst Recommendation Data",
         "description": "Provides analyst recommendations for buying, selling, or holding a company's stock. Useful for investors to understand analysts' views on a company's stock.",
         "columns": [
@@ -37,7 +38,7 @@ def fmp_analyst_recommendation(fmp_company_profiles: pd.DataFrame) -> pd.DataFra
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Analyst Estimates Data",
         "description": "Provides analyst estimates for a company's future earnings and revenue, essential for understanding what analysts expect from a company and identifying potential investment opportunities.",
         "columns": [

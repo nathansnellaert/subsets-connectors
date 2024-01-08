@@ -1,10 +1,11 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .utils import make_v3_request
+from .source import financialmodellingprep
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Stock Grade Data",
         "description": "Retrieves grading data for stocks, including historical and current grades assigned by various grading companies.",
         "columns": [

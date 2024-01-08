@@ -2,10 +2,22 @@ from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .country_code_2_to_simple_name import mapping
 
+github = {
+    "id": "github",
+    "name": "GitHub",
+    "description": "GitHub is a web-based hosting service for version control using Git.",
+    "url": "https://github.com"
+}
 
+opendatasoft = {
+    "id": "opendatasoft",
+    "name": "OpenDataSoft",
+    "description": "OpenDataSoft is a cloud-based turnkey platform for data publishing, sharing and API management.",
+    "url": "https://www.opendatasoft.com/"
+}
 
 @asset(metadata = {
-    "source": "github",
+    "source": github,
     "name": "Countries",
     "description": "Information about countries including codes, names, and geographical details.",
     "columns": [
@@ -306,7 +318,7 @@ def countries(context):
     return df
 
 @asset(metadata={
-    "source": "github",
+    "source": github,
     "name": "Regions",
     "description": "Region names and mapping between region and subregion.",
     "columns": [{
@@ -324,7 +336,7 @@ def regions(countries):
     return countries[['region_name', 'sub_region_name', 'intermediate_region_name']].drop_duplicates()
 
 @asset(metadata={
-    "source": "opendatasoft",
+    "source": github,
     "name": "Cities Data",
     "description": "Information about cities with more than 1000 inhabitants.",
     "columns": [{
@@ -363,7 +375,7 @@ def cities():
     return cities
 
 @asset(metadata={
-    "source": "github",
+    "source": github,
     "name": "Country Border Mapping",
     "description": "Mapping of countries to their bordering countries.",
     "columns": [{
@@ -382,7 +394,7 @@ def country_border_mapping():
     return df
 
 @asset(metadata={
-    "source": "github",
+    "source": github,
     "name": "International Organizations",
     "description": "Mapping between countries and international organizations, such as the UN, NATO, etc.",
     "columns": [{
@@ -404,7 +416,7 @@ def organisation():
     return orgs
 
 @asset(metadata={
-    "source": "opendatasoft",
+    "source": github,
     "name": "US States",
     "description": "Information about US states including name, code, and location.",
     "columns": [{
