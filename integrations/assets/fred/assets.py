@@ -7,6 +7,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 
 source = {
     "id": "fred",
+    "logo": "https://storage.googleapis.com/subsets-public-assets/source_logos/fred.png",
     "name": "Federal Reserve Economic Data",
     "description": "The Federal Reserve Economic Data (FRED) API is a web service that allows developers to write programs and build applications that retrieve economic data from the FRED database hosted by the Economic Research Division of the Federal Reserve Bank of St. Louis.",
     "url": "https://fred.stlouisfed.org/"

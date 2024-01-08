@@ -4,6 +4,7 @@ from .country_code_2_to_simple_name import mapping
 
 github = {
     "id": "github",
+    "logo": "https://storage.googleapis.com/subsets-public-assets/source_logos/github.png",
     "name": "GitHub",
     "description": "GitHub is a web-based hosting service for version control using Git.",
     "url": "https://github.com"
@@ -11,6 +12,7 @@ github = {
 
 opendatasoft = {
     "id": "opendatasoft",
+    "logo": "https://storage.googleapis.com/subsets-public-assets/source_logos/opendatasoft.png",
     "name": "OpenDataSoft",
     "description": "OpenDataSoft is a cloud-based turnkey platform for data publishing, sharing and API management.",
     "url": "https://www.opendatasoft.com/"
