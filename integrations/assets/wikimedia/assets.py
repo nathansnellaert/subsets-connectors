@@ -7,6 +7,7 @@ from datetime import datetime
 
 wikimedia = {
     "id": "wikimedia",
+    "logo": "https://storage.googleapis.com/subsets-public-assets/source_logos/wikimedia.png",
     "name": "Wikimedia",
     "description": "Wikimedia is a global movement whose mission is to bring free educational content to the world.",
     "url": "https://wikimediafoundation.org/"    

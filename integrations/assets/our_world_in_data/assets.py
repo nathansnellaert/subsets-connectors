@@ -3,6 +3,7 @@ from dagster import asset, FreshnessPolicy
 
 our_world_in_data = {
     "id": "our_world_in_data",
+    "logo": "https://storage.googleapis.com/subsets-public-assets/source_logos/our_world_in_data.png",
     "name": "Our World in Data",
     "description": "Our World in Data is a scientific online publication that focuses on large global problems such as poverty, disease, hunger, climate change, war, existential risks, and inequality.",
     "url": "https://ourworldindata.org/"

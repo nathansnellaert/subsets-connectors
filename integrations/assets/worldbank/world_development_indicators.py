@@ -6,6 +6,7 @@ import io
 
 worldbank = {
     "id": "worldbank",
+    "logo": "https://storage.googleapis.com/subsets-public-assets/source_logos/worldbank.png",
     "name": "World Bank",
     "description": "The World Bank is an international financial institution that provides loans and grants to the governments of low- and middle-income countries for the purpose of pursuing capital projects.",
     "url": "https://www.worldbank.org/"

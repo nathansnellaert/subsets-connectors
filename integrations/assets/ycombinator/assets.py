@@ -4,6 +4,7 @@ from .download import download_ycombinator_companies
 
 ycombinator = {
     "id": "ycombinator",
+    "logo": "https://storage.googleapis.com/subsets-public-assets/source_logos/ycombinator.png",
     "name": "Y Combinator",
     "description": "Y Combinator is an American seed money startup accelerator launched in March 2005.",
     "url": "https://www.ycombinator.com/"
