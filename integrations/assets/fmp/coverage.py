@@ -1,13 +1,11 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
-import os
-import requests
-import json
+from .source import financialmodellingprep
 from .utils import make_v4_request, make_v3_request
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Company Profiles Data",
         "description": "Retrieves comprehensive profiles for a wide range of companies, including key financial metrics, industry classification, and corporate information.",
         "columns": [
@@ -125,7 +123,7 @@ def delisted_company_symbols():
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "CIK List Data",
         "description": "Provides a comprehensive database of CIK numbers for SEC-registered entities.",
         "columns": [
@@ -140,7 +138,7 @@ def cik_list() -> pd.DataFrame:
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Symbol Changes Data",
         "description": "Tracks symbol changes due to mergers, acquisitions, stock splits, and name changes.",
         "columns": [

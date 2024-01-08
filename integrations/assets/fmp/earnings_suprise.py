@@ -1,10 +1,11 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .utils import make_v4_request
+from .source import financialmodellingprep
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Earnings Surprises Data",
         "description": "Retrieves data on earnings surprises, comparing actual earnings results with estimated earnings for various companies over time.",
         "columns": [

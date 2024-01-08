@@ -4,10 +4,16 @@ import requests
 import zipfile
 import io
 
+worldbank = {
+    "id": "worldbank",
+    "name": "World Bank",
+    "description": "The World Bank is an international financial institution that provides loans and grants to the governments of low- and middle-income countries for the purpose of pursuing capital projects.",
+    "url": "https://www.worldbank.org/"
+}
 @multi_asset(
     outs={
         "world_development_indicators": AssetOut(metadata={
-            "source": "worldbank",
+            "source": worldbank,
             "name": "World Development Indicators",
             "description": "Primary World Bank collection of development indicators, compiled from officially recognized international sources.",
             "columns": [
@@ -20,7 +26,7 @@ import io
             ]
         }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24 * 7)),
         "world_development_indicators_series_metadata": AssetOut(metadata={
-            "source": "worldbank",
+            "source": worldbank,
             "name": "WDI Series Metadata",
             "description": "Metadata for each indicator series in the World Development Indicators dataset.",
             "columns": [
@@ -43,7 +49,7 @@ import io
             ]
         }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24 * 7)),
         "world_development_indicators_country_series_metadata": AssetOut(metadata={
-            "source": "worldbank",
+            "source": worldbank,
             "name": "WDI Country Series Metadata",
             "description": "Metadata for an indicator measured in a given country",
             "columns": [
@@ -53,7 +59,7 @@ import io
             ]
         }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24 * 7)),
         "world_development_indicators_observation_metadata": AssetOut(metadata={
-            "source": "worldbank",
+            "source": worldbank,
             "name": "WDI Footnote Metadata",
             "description": "Metadata for individual observations.",
             "columns": [
@@ -64,7 +70,7 @@ import io
             ]
         }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24 * 7)),
         "world_development_indicators_series_year_metadata": AssetOut(metadata={
-            "source": "worldbank",
+            "source": worldbank,
             "name": "WDI Series Time Metadata",
             "description": "Metadata for an indicator at a given year.",
             "columns": [

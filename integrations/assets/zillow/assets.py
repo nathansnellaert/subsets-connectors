@@ -1,6 +1,12 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 
+zillow = {
+    "id": "zillow",
+    "name": "Zillow",
+    "description": "Zillow is an American online real estate marketplace company that was founded in 2006.",
+    "url": "https://www.zillow.com/"
+}
 def process_zillow_csv(df):
     # Default has a separate column for each date, melt to skinny table
     df = df.melt(
@@ -19,7 +25,7 @@ def process_zillow_csv(df):
     return df
 
 @asset(metadata={
-    "source": "zillow",
+    "source": zillow,
     "name": "Zillow Home Value Index",
     "description": "Monthly Zillow Home Value Index data for metro areas.",
 }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))
@@ -29,7 +35,7 @@ def zillow_home_value_index():
     return process_zillow_csv(df)
 
 @asset(metadata={
-    "source": "zillow",
+    "source": zillow,
     "name": "Zillow Observed Rent Index",
     "description": "Monthly Zillow Observed Rent Index data for metro areas.",
 }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))
@@ -39,7 +45,7 @@ def zillow_observed_rent_index():
     return process_zillow_csv(df)
 
 @asset(metadata={
-    "source": "zillow",
+    "source": zillow,
     "name": "Zillow Inventory for Sale",
     "description": "Monthly inventory for sale data for metro areas.",
 }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))
@@ -49,7 +55,7 @@ def zillow_inventory_for_sale():
     return process_zillow_csv(df)
 
 @asset(metadata={
-    "source": "zillow",
+    "source": zillow,
     "name": "Zillow Median List Price",
     "description": "Monthly median list price data for metro areas.",
 }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))
@@ -59,7 +65,7 @@ def zillow_median_list_price():
     return process_zillow_csv(df)
 
 @asset(metadata={
-    "source": "zillow",
+    "source": zillow,
     "name": "Zillow Sales Count Now",
     "description": "Monthly sales count data for metro areas.",
 }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * 1", maximum_lag_minutes=60 * 24))

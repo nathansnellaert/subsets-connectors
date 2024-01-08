@@ -1,8 +1,15 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 
+source = {
+    "id": "economist",
+    "name": "The Economist",
+    "description": "The Economist is an international weekly newspaper printed in magazine-format and published digitally that focuses on current affairs, international business, politics, and technology.",
+    "url": "https://www.economist.com/"
+}
+
 @asset(metadata={
-    "source": "economist",
+    "source": source,
     "name": "The Big Mac Index",
     "description": "The Big Mac Index compares relative price levels across countries using the price of McDonald's Big Mac.",
     "columns": [{

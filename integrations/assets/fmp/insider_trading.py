@@ -1,6 +1,7 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .utils import make_v4_request
+from .source import financialmodellingprep
 
 def convert_mixed_format(date_str):
     try:
@@ -14,7 +15,7 @@ def convert_mixed_format(date_str):
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Insider Trading Data",
         "description": "Retrieves insider trading data for various companies, providing insights into the trading activities of company insiders.",
         "columns": [

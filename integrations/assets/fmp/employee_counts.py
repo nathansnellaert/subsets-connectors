@@ -1,10 +1,11 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .utils import make_v4_request
+from .source import financialmodellingprep
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Employee Count Data",
         "description": "Historical data on employee counts for various companies, including details like company name, filing date, and report period.",
         "columns": [

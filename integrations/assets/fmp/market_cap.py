@@ -1,10 +1,11 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .utils import make_v3_request
+from .source import financialmodellingprep
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Market Capitalization Data",
         "description": "Retrieves historical market capitalization data for various companies, reflecting the total market value of their outstanding shares.",
         "columns": [

@@ -14,6 +14,7 @@ def subsets_datasets() -> pd.DataFrame:
                 'id': id,
                 'name': metadata.get('name', None),
                 'description': metadata.get('description', None),
+                'source': metadata.get('source', None),
             })
 
     return pd.DataFrame(datasets)

@@ -1,6 +1,7 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .utils import make_v4_request
+from .source import financialmodellingprep
 
 def handle_request(ticker):
     df = make_v4_request('senate-trading', {'symbol': ticker})
@@ -28,7 +29,7 @@ def handle_request(ticker):
     return df
 
 @asset(metadata={
-    "source": "Financial Modeling Prep",
+    "source": financialmodellingprep,
     "name": "Senate Trading",
     "description": "Records of stock trades made by US senators, including the transaction date, amount, and other details.",
     "columns": [{

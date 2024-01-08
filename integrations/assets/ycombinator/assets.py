@@ -2,8 +2,14 @@ import pandas as pd
 from dagster import asset, FreshnessPolicy
 from .download import download_ycombinator_companies
 
+ycombinator = {
+    "id": "ycombinator",
+    "name": "Y Combinator",
+    "description": "Y Combinator is an American seed money startup accelerator launched in March 2005.",
+    "url": "https://www.ycombinator.com/"
+}
 @asset(metadata={
-    "source": "ycombinator",
+    "source": ycombinator,
     "name": "YCombinator Companies",
     "description": "Detailed data of companies that have participated in Y Combinator's accelerator program.",
 }, freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * *", maximum_lag_minutes=60 * 24))

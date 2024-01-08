@@ -1,6 +1,7 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .utils import make_v4_request
+from .source import financialmodellingprep
 
 def handle_request(year):
     df = make_v4_request('key-metrics-bulk', {'year': year, 'period': 'quarter'})
@@ -74,7 +75,7 @@ def handle_request(year):
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "Key Metrics Data",
         "description": "Retrieves and transforms key financial metrics data for multiple years into a structured format, focusing on various financial ratios and values critical for financial analysis.",
         "columns": [

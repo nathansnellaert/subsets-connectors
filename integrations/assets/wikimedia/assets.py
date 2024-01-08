@@ -5,7 +5,31 @@ from collections import defaultdict
 import pyarrow as pa
 from datetime import datetime
 
-@asset(partitions_def=DailyPartitionsDefinition(start_date="2016-01-01"), io_manager_key="vanilla_parquet_io_manager",
+wikimedia = {
+    "id": "wikimedia",
+    "name": "Wikimedia",
+    "description": "Wikimedia is a global movement whose mission is to bring free educational content to the world.",
+    "url": "https://wikimediafoundation.org/"    
+}
+
+@asset(metadata={
+    "source": wikimedia,
+    "name": "Wikipedia Daily Pageviews",
+    "description": "Daily pageviews for Wikipedia articles",
+    "columns": [{
+        "name": "id",
+        "description": "Page ID"
+    }, {
+        "name": "entity",
+        "description": "Entity name"
+    }, {
+        "name": "views",
+        "description": "Number of views"
+    }, {
+        "name": "date",
+        "description": "Date of the data"
+    }]
+}, partitions_def=DailyPartitionsDefinition(start_date="2016-01-01"), io_manager_key="vanilla_parquet_io_manager",
 freshness_policy=FreshnessPolicy(cron_schedule="0 0 * * *", maximum_lag_minutes=60 * 24))
 def wikipedia_daily_pageviews(context):
     date_str = context.partition_key

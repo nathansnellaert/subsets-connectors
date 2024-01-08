@@ -3,6 +3,7 @@ import pandas as pd
 from dagster import asset, DailyPartitionsDefinition
 from datetime import datetime
 from .utils import make_v4_request
+
 current_dt = datetime.now()
 
 @asset(partitions_def=DailyPartitionsDefinition(start_date="2014-01-01"))

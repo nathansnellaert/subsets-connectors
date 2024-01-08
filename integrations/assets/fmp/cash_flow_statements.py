@@ -1,6 +1,7 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from integrations.assets.fmp.utils import make_v4_request
+from .source import financialmodellingprep
 
 
 @asset(

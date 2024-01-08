@@ -1,10 +1,11 @@
 from dagster import asset, FreshnessPolicy
 import pandas as pd
 from .utils import make_v4_request
+from .source import financialmodellingprep
 
 @asset(
     metadata={
-        "source": "Financial Modeling Prep",
+        "source": financialmodellingprep,
         "name": "ESG Scores Data",
         "description": "Retrieves ESG (Environmental, Social, Governance) scores for various companies, providing insights into their sustainability and ethical impacts.",
         "columns": [
