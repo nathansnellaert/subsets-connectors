@@ -4,6 +4,7 @@ import requests
 
 tsa = {
     "id": "tsa",
+    "logo": "https://storage.googleapis.com/subsets-public-assets/source_logos/tsa.png",
     "name": "Transportation Security Administration",
     "description": "The Transportation Security Administration is an agency of the U.S. Department of Homeland Security that has authority over the security of the traveling public in the United States.",
     "url": "https://www.tsa.gov/"

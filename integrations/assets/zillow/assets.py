@@ -3,6 +3,7 @@ import pandas as pd
 
 zillow = {
     "id": "zillow",
+    "logo": "https://storage.googleapis.com/subsets-public-assets/source_logos/zillow.png",
     "name": "Zillow",
     "description": "Zillow is an American online real estate marketplace company that was founded in 2006.",
     "url": "https://www.zillow.com/"

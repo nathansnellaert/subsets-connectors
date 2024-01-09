@@ -3,6 +3,7 @@ import pandas as pd
 
 source = {
     "id": "economist",
+    "logo": "https://storage.googleapis.com/subsets-public-assets/source_logos/economist.png",
     "name": "The Economist",
     "description": "The Economist is an international weekly newspaper printed in magazine-format and published digitally that focuses on current affairs, international business, politics, and technology.",
     "url": "https://www.economist.com/"
