@@ -5,7 +5,7 @@ from .source import unctad
 @asset(metadata={
     "source": unctad,
     "name": "Trade, growth rates, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchGR.",
+    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/US.BiotradeMerchGR.",
 }, io_manager_key="vanilla_parquet_io_manager")
 def trade_growth_rates_annual():
     return download_dataset('US_BiotradeMerchGR')
@@ -14,7 +14,7 @@ def trade_growth_rates_annual():
 @asset(metadata={
     "source": unctad,
     "name": "Biotrade as percentage of total trade, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchShare.",
+    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/US.BiotradeMerchShare.",
 }, io_manager_key="vanilla_parquet_io_manager")
 def biotrade_as_percentage_of_total_trade_annual():
     return download_dataset('US_BiotradeMerchShare')
@@ -23,7 +23,7 @@ def biotrade_as_percentage_of_total_trade_annual():
 @asset(metadata={
     "source": unctad,
     "name": "Biotrade as percentage of Gross Domestic Product, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBioTradeMerchGDPShare.",
+    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/US.BioTradeMerchGDPShare.",
 }, io_manager_key="vanilla_parquet_io_manager")
 def biotrade_as_percentage_of_gross_domestic_product_annual():
     return download_dataset('US_BioTradeMerchGDPShare')
@@ -32,7 +32,7 @@ def biotrade_as_percentage_of_gross_domestic_product_annual():
 @asset(metadata={
     "source": unctad,
     "name": "Product concentration indices of exports and imports, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBioTradeMerchProdConcent.",
+    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/US.BioTradeMerchProdConcent.",
 }, io_manager_key="vanilla_parquet_io_manager")
 def product_concentration_indices_of_exports_and_imports_annual():
     return download_dataset('US_BioTradeMerchProdConcent')
@@ -41,7 +41,7 @@ def product_concentration_indices_of_exports_and_imports_annual():
 @asset(metadata={
     "source": unctad,
     "name": "Market concentration indices of exports and imports of products, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBioTradeMerchMarketConcent.",
+    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/US.BioTradeMerchMarketConcent.",
 }, io_manager_key="vanilla_parquet_io_manager")
 def market_concentration_indices_of_exports_and_imports_of_products_annual():
     return download_dataset('US_BioTradeMerchMarketConcent')
@@ -50,7 +50,7 @@ def market_concentration_indices_of_exports_and_imports_of_products_annual():
 @asset(metadata={
     "source": unctad,
     "name": "Market structural change indices of exports and imports of products, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBioTradeMerchStructChange.",
+    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/US.BioTradeMerchStructChange.",
 }, io_manager_key="vanilla_parquet_io_manager")
 def market_structural_change_indices_of_exports_and_imports_of_products_annual():
     return download_dataset('US_BioTradeMerchStructChange')
@@ -59,7 +59,7 @@ def market_structural_change_indices_of_exports_and_imports_of_products_annual()
 @asset(metadata={
     "source": unctad,
     "name": "Revealed comparative advantage index, annual",
-    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/USBiotradeMerchRCA.",
+    "description": "This dataset was downloaded from UNCTADStat. More information about this dataset can be found at https://unctadstat.unctad.org/datacentre/reportInfo/US.BiotradeMerchRCA.",
 }, io_manager_key="vanilla_parquet_io_manager")
 def revealed_comparative_advantage_index_annual():
     return download_dataset('US_BiotradeMerchRCA')
