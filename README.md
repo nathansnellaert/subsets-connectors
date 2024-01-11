@@ -1,12 +1,6 @@
 # Subsets Connectors
 
-This project contains the data connectors used to build the subset data warehouse. It currently contains 100+ datasets, such as:
-
-- Commodity prices
-- Federal reserve economic data
-- Company financials
-- Daily page views for all english wikipedia pages
-- World Development Indicators
+This project contains the data connectors used to build the subset data warehouse. It currently contains 120+ datasets including an index of YC companies, U.S. house prices, and Wikipedia search volumes. 
 
 It is built with [Dagster](https://dagster.io/), a python-based data orchestrator.
 
